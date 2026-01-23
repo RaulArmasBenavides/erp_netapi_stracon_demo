@@ -1,4 +1,4 @@
-name: apimovies
+name: PaymentServiceNet
 version: "3.9"
 
 services:
@@ -6,8 +6,8 @@ services:
     image: ${DOCKER_REGISTRY-}movies
     build:
       context: .        
-      dockerfile: ApiMovies/Dockerfile
+      dockerfile: PaymentServiceNet/Dockerfile
     ports:
       - "8000:80"
     environment:
-      ConnectionStrings__ConexionSQL: "Server=host.docker.internal,1433;Database=ApiMoviesNet7;User Id=sa;Password=sasasa;Encrypt=False"
+      ConnectionStrings__ConexionSQL: "Server=host.docker.internal,1433;Database=PaymentServiceNetNet7;User Id=sa;Password=sasasa;Encrypt=False"
