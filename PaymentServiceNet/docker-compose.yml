@@ -1,0 +1,13 @@
+name: apimovies
+version: "3.9"
+
+services:
+  movies:
+    image: ${DOCKER_REGISTRY-}movies
+    build:
+      context: .        
+      dockerfile: ApiMovies/Dockerfile
+    ports:
+      - "8000:80"
+    environment:
+      ConnectionStrings__ConexionSQL: "Server=host.docker.internal,1433;Database=ApiMoviesNet7;User Id=sa;Password=sasasa;Encrypt=False"

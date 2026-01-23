@@ -1,0 +1,13 @@
+name: apimovies
+version: "3.9"
+
+services:
+  movies:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://0.0.0.0:80"
+      ConnectionStrings__ConexionSQL: "Server=host.docker.internal,1433;Database=ApiMoviesNET7;User Id=sa;Password=sasasa;Encrypt=False"
+    ports:
+      - "8000:80" 
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <!-- Script Creado por Raúl Armas-->
+  <Target Name="AssemblyVersion" BeforeTargets="CoreCompile" DependsOnTargets="PrepareForBuild">
+    <PropertyGroup>
+      <!-- Define Constants -->
+      <AssemblyInfo>$(IntermediateOutputPath)$(MSBuildProjectName).AssemblyInfo$(DefaultLanguageSourceExtension)</AssemblyInfo>
+      <AssemblyInfoContent>$([System.IO.File]::ReadAllText($(AssemblyInfo)))</AssemblyInfoContent>
+      <AssemblyFileRegex>\[assembly: System.Reflection.AssemblyFileVersionAttribute\(.(\d+)\.(\d+)\.(\d+)\.(\d+)....</AssemblyFileRegex>
+      <AssemblyFile>[assembly: System.Reflection.AssemblyFileVersionAttribute("$([System.DateTime]::Now.ToString("yyyy.M.d.HHmm"))")]</AssemblyFile>
+      <AssemblyInformationalRegex>\[assembly: System.Reflection.AssemblyInformationalVersionAttribute\(.(\d+)\.(\d+)\.(\d+)\+</AssemblyInformationalRegex>
+      <AssemblyInformational>[assembly: System.Reflection.AssemblyInformationalVersionAttribute("$([System.DateTime]::Now.ToString("yyyy.M.d.HHmm"))+</AssemblyInformational>
+      <AssemblyVersionRegex>\[assembly: System.Reflection.AssemblyVersionAttribute\(.(\d+)\.(\d+)\.(\d+)\.(\d+)....</AssemblyVersionRegex>
+      <AssemblyVersion>[assembly: System.Reflection.AssemblyVersionAttribute("$([System.DateTime]::Now.ToString("yyyy.M.d.HHmm"))")]</AssemblyVersion>
+    </PropertyGroup>
+    <!-- Escribir versionamiento en archivo AssemblyInfo -->
+    <WriteLinesToFile File="$(AssemblyInfo)" Lines="$([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace($(AssemblyInfoContent), $(AssemblyFileRegex), $(AssemblyFile))), $(AssemblyInformationalRegex), $(AssemblyInformational))), $(AssemblyVersionRegex), $(AssemblyVersion)))" Overwrite="true" />
+  </Target>
+</Project>
