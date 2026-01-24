@@ -24,7 +24,6 @@ namespace PaymentServiceNet.Application.Services
         public UserService(IUnitOfWork unitOfWork, IConfiguration config, UserManager<AppUsuario> userManager, IMapper mapper , RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
-
             _mapper = mapper;
             contenedorTrabajo = unitOfWork;
             _userManager = userManager;
