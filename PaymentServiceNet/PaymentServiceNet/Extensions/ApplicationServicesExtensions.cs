@@ -4,9 +4,7 @@ using PaymentServiceNet.Core.IRepositorio;
 using PaymentServiceNet.Repositorio;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.IdentityModel.Tokens;
-using System.IO.Compression;
 using System.Text;
 
 namespace PaymentServiceNet.Extensions
@@ -16,14 +14,9 @@ namespace PaymentServiceNet.Extensions
 
         public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IMovieService, MovieService>();
+         
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ICategoryService, CategorieService>();
-
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-
             services.AddAuthorization(options => options.DefaultPolicy =
             new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build());
             var key = configuration.GetValue<string>("ApiSettings:Secreta");
@@ -45,12 +38,6 @@ namespace PaymentServiceNet.Extensions
                     ClockSkew = TimeSpan.Zero,
                 };
             });
-
-
-        
         }
-
-
-
     }
 }

@@ -4,8 +4,8 @@ namespace PaymentServiceNet.Core.IRepositorio
 {
     public interface IUnitOfWork : IDisposable
     {
-        ICategoryRepository Categories { get; }
-        IMovieRepository Movies { get; }
+        IPurchaseRequestRepository PurchaseRequests { get; }
+        ISupplierRepository Suppliers { get; }
         IUserRepository Users { get; }
         void Save();
         Task<int> SaveChangesAsync();

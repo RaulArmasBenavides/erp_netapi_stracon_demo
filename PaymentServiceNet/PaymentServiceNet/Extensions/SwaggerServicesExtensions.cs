@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using System.Security.Policy;
 
 namespace PaymentServiceNet.Extensions
 {
@@ -14,12 +15,13 @@ namespace PaymentServiceNet.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "MOVIES" + " API",
+                    Title = "Servicio Restful Stracon API",
                     Version = "v" + fileVersion,
                     Description = "Microservice Architecture",
                     Contact = new OpenApiContact
                     {
-                        Name = "Seguridad @ Cofide"
+                        Name = "Stracon tech",
+                        Email ="raularmasbx@gmail.com"
                     },
                     License = new OpenApiLicense
                     {

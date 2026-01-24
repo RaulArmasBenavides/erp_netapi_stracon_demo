@@ -17,19 +17,6 @@ namespace PaymentServiceNet.Infrastructure
                   b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)), 
                   ServiceLifetime.Scoped);
 
-            // Configuración para Oracle
-            //services.AddDbContext<OracleDBContext>(options =>
-            //    options.UseOracle(
-            //        configuration.GetConnectionString("ConexionOracle"),
-            //        b => b.MigrationsAssembly(typeof(OracleDBContext).Assembly.FullName)),
-            //    ServiceLifetime.Scoped);
-
-            // Configuración para PostgreSQL
-            //services.AddDbContext<PostgreSqlContext>(options =>
-            //    options.UseNpgsql(
-            //        configuration.GetConnectionString("ConexionPostgreSQL"),
-            //        b => b.MigrationsAssembly(typeof(PostgreSqlContext).Assembly.FullName)),
-            //    ServiceLifetime.Scoped);
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;

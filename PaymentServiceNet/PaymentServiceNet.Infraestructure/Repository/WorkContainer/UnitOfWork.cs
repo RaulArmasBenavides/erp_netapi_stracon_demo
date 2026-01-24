@@ -1,5 +1,6 @@
 ﻿using PaymentServiceNet.Core.IRepositorio;
 using PaymentServiceNet.Infrastructure.Data;
+using PaymentServiceNet.Infrastructure.Repository;
 using PaymentServiceNet.Repositorio;
 
 namespace PaymentServiceNet.Infrastructure.Repositorio.WorkContainer
@@ -10,12 +11,12 @@ namespace PaymentServiceNet.Infrastructure.Repositorio.WorkContainer
         private readonly ApplicationDbContext db;
         public UnitOfWork( ApplicationDbContext mdb) {
             db = mdb;
-            Categories = new CategoryRepository(mdb);
-            Movies = new MovieRepository(mdb);
+            PurchaseRequests = new PurchaseRequestRepository(mdb);
+            Suppliers = new SupplierRepository(mdb);
             Users = new UserRepository(mdb, null);
         }
-        public ICategoryRepository Categories { get; private set; }
-        public IMovieRepository Movies { get; private set; }
+        public IPurchaseRequestRepository PurchaseRequests { get; private set; }
+        public ISupplierRepository Suppliers { get; private set; }
         public IUserRepository Users { get; private set; }
         public void Dispose()
         {
