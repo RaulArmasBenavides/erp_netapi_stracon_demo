@@ -13,7 +13,7 @@ services:
       - sqlserver
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      ConnectionStrings__ConexionSQL: "Server=sqlserver,1433;Database=stracon_db;User Id=sa;Password=sasasa;Encrypt=False;TrustServerCertificate=True"
+      ConnectionStrings__ConexionSQL: "Server=sqlserver,1433;Database=stracon_db;User Id=sa;Password=P@ssw0rd?ts;Encrypt=False;TrustServerCertificate=True"
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -21,14 +21,14 @@ services:
     restart: unless-stopped
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "sasasa"
+      MSSQL_SA_PASSWORD: "P@ssw0rd?ts"
       MSSQL_PID: "Express"
     ports:
       - "14333:1433"   # para conectarte desde tu PC (opcional)
     volumes:
       - stracon_sql_data:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P sasasa -Q \"SELECT 1\" || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P P@ssw0rd?ts -Q \"SELECT 1\" || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 15

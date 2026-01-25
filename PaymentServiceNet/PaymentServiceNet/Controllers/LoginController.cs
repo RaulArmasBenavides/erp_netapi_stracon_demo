@@ -26,8 +26,6 @@ namespace PaymentServiceNet.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login([FromBody] LoginUserDto usuarioLoginDto)
         {
-
-
             var rptaservice = await this.usService.Login(usuarioLoginDto);
             //var respuestaLogin = await _usRepo.Login(usuarioLoginDto);
 

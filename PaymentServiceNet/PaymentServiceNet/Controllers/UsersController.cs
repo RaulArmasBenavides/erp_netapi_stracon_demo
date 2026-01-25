@@ -18,7 +18,6 @@ namespace PaymentServiceNet.Controllers
         public UsersController(IUserService usservice, IMapper mapper,IConfiguration config)
         {
             usService = usservice;
- 
             _mapper = mapper;
         }
 
@@ -67,32 +66,8 @@ namespace PaymentServiceNet.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateUserAsync([FromBody] UsuarioRegistroDto usuarioRegistroDto)
         {
-
-            var rptaservice= await this.usService.Registro(usuarioRegistroDto);
-            //bool validarNombreUsuarioUnico = _usRepo.IsUniqueUser(usuarioRegistroDto.UserName);
-            //if (!validarNombreUsuarioUnico)
-            //{
-            //    _respuestaApi.StatusCode = HttpStatusCode.BadRequest;
-            //    _respuestaApi.IsSuccess = false;
-            //    _respuestaApi.ErrorMessages.Add("El nombre de usuario ya existe");
-            //    return BadRequest(_respuestaApi);
-            //}
-
-            //var usuario = await _usRepo.Registro(usuarioRegistroDto);
-            //if (usuario == null)
-            //{
-            //    _respuestaApi.StatusCode = HttpStatusCode.BadRequest;
-            //    _respuestaApi.IsSuccess = false;
-            //    _respuestaApi.ErrorMessages.Add("Error en el registro");
-            //    return BadRequest(_respuestaApi);
-            //}
-
-            //_respuestaApi.StatusCode = HttpStatusCode.OK;
-            //_respuestaApi.IsSuccess = true;         
+            var rptaservice= await this.usService.Registro(usuarioRegistroDto);    
             return Ok(rptaservice);
         }
-
-
-
     }
 }

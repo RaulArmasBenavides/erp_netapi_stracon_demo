@@ -81,16 +81,24 @@ namespace PaymentServiceNet.Application.Services
             var result = await this._userManager.CreateAsync(usuario, usuarioRegistroDto.Password);
             if (result.Succeeded)
             {
-                if (!_roleManager.RoleExistsAsync("admin").GetAwaiter().GetResult())
-                {
-                    await _roleManager.CreateAsync(new IdentityRole("admin"));
-                    await _roleManager.CreateAsync(new IdentityRole("registrado"));
-                }
-                await this._userManager.AddToRoleAsync(usuario, "admin");
+                //if (!_roleManager.RoleExistsAsync("Requester").GetAwaiter().GetResult())
+                //{
+                //    await _roleManager.CreateAsync(new IdentityRole("Requester"));
+                //    await _roleManager.CreateAsync(new IdentityRole("Approver"));
+                //}
+                await EnsureRoleExistsAsync("Requester");
+                await EnsureRoleExistsAsync("Approver");
+                await this._userManager.AddToRoleAsync(usuario, "Approver");
                 var usuarioRetornado = this.contenedorTrabajo.Users.GetUsuarioByUserName(usuarioRegistroDto.NombreUsuario);
                 return _mapper.Map<DataUserDto>(usuarioRetornado);
             }
             return new DataUserDto();
+        }
+
+        private async Task EnsureRoleExistsAsync(string roleName)
+        {
+            if (!await _roleManager.RoleExistsAsync(roleName))
+                await _roleManager.CreateAsync(new IdentityRole(roleName));
         }
 
         public ICollection<User> GetUsuarios()

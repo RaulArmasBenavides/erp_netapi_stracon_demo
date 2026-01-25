@@ -21,11 +21,11 @@ namespace PaymentServiceNet.Extensions
                     Contact = new OpenApiContact
                     {
                         Name = "Stracon tech",
-                        Email ="raularmasbx@gmail.com"
+                        Email ="raularmasbx@gmail.com",
                     },
                     License = new OpenApiLicense
                     {
-                        Name = "Derechos Reservados"
+                        Name = "Derechos Reservados",
                     },
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

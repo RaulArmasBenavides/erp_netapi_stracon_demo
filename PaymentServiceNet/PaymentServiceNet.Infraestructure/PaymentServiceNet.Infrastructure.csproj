@@ -24,6 +24,10 @@
     <ProjectReference Include="..\PaymentServiceNet.Core\PaymentServiceNet.Core.csproj" />
 	<ProjectReference Include="..\PaymentServiceNet.CrossCutting\PaymentServiceNet.CrossCutting.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
   <!-- Script Creado por Raúl Armas-->
   <Target Name="AssemblyVersion" BeforeTargets="CoreCompile" DependsOnTargets="PrepareForBuild">
     <PropertyGroup>
