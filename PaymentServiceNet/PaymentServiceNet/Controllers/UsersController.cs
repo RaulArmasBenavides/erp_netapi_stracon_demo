@@ -1,14 +1,17 @@
-﻿using PaymentServiceNet.Application.Dtos;
-using PaymentServiceNet.Application.Interfaces;
-using PaymentServiceNet.Core.Entities;
+﻿using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PaymentServiceNet.Application.Dtos;
+using PaymentServiceNet.Application.Interfaces;
+using PaymentServiceNet.Core.Entities;
 
 namespace PaymentServiceNet.Controllers
 {
-    [Route("api/users")]
+     
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/users")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService usService;

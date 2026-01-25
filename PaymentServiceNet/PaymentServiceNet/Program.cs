@@ -1,12 +1,13 @@
-﻿using PaymentServiceNet.Application.Dtos;
+﻿using Asp.Versioning;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using PaymentServiceNet.Application.Dtos;
 using PaymentServiceNet.Core.Entities;
  
 using PaymentServiceNet.Extensions;
 using PaymentServiceNet.Infrastructure;
 using PaymentServiceNet.Infrastructure.Data;
 using PaymentServiceNet.Middlewares;
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Serilog;
 
 public class Program
@@ -34,6 +35,22 @@ public class Program
         builder.Services.AddAutoMapper(typeof(PeliculasMapper));
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services
+        .AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ReportApiVersions = true;
+
+            // URL segment: /api/v1/...
+            options.ApiVersionReader = new UrlSegmentApiVersionReader();
+        })
+        .AddMvc()
+        .AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'VVV";           // v1
+            options.SubstituteApiVersionInUrl = true;     // reemplaza {version:apiVersion}
+        });
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerDocumentation();
         builder.Services.ConfigureCors();

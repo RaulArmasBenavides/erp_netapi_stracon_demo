@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PaymentServiceNet.Core.Interfaces;
@@ -8,8 +9,10 @@ using System.Security.Claims;
 
 namespace PaymentServiceNet.Controllers
 {
-    [Route("api/suppliers")]
+ 
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/suppliers")]
     public sealed class SuppliersController : ControllerBase
     {
         private readonly ISupplierService _supplierService;
@@ -32,10 +35,10 @@ namespace PaymentServiceNet.Controllers
             var suppliers = await _supplierService.GetAllAsync(ct);
 
             var dto = new List<SupplierDto>(suppliers.Count);
-            foreach (var s in suppliers)
-                dto.Add(_mapper.Map<SupplierDto>(s));
+            //foreach (var s in suppliers)
+            //    dto.Add(_mapper.Map<SupplierDto>(s));
 
-            return Ok(dto);
+            return Ok(suppliers);
         }
 
         // GET: api/suppliers/{id}
@@ -65,10 +68,10 @@ namespace PaymentServiceNet.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var created = await _supplierService.CreateAsync(dto, ct);
-            var createdDto = _mapper.Map<SupplierDto>(created);
+            //var createdDto = _mapper.Map<SupplierDto>(created);
 
             // 201 + Location header
-            return CreatedAtRoute("GetSupplier", new { id = createdDto.Id }, createdDto);
+            return CreatedAtRoute("GetSupplier", new { id = created.Id }, created);
         }
 
         // PATCH: api/suppliers/{id}

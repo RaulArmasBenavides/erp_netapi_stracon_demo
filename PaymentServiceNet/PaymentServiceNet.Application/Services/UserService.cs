@@ -39,8 +39,8 @@ namespace PaymentServiceNet.Application.Services
             {
                 return new UsuarioLoginRespuestaDto()
                 {
-                    Token = "",
-                    Usuario = null
+                    Access_token = "",
+                    User = null
                 };
             }
             //Aquí existe el usuario entonces podemos procesar el login
@@ -62,8 +62,8 @@ namespace PaymentServiceNet.Application.Services
             var token = manejadorToken.CreateToken(tokenDescriptor);
             UsuarioLoginRespuestaDto usuarioLoginRespuestaDto = new UsuarioLoginRespuestaDto()
             {
-                Token = manejadorToken.WriteToken(token),
-                Usuario = _mapper.Map<DataUserDto>(usuario),
+                Access_token = manejadorToken.WriteToken(token),
+                User = _mapper.Map<DataUserDto>(usuario),
 
             };
             return usuarioLoginRespuestaDto;
@@ -88,7 +88,7 @@ namespace PaymentServiceNet.Application.Services
                 //}
                 await EnsureRoleExistsAsync("Requester");
                 await EnsureRoleExistsAsync("Approver");
-                await this._userManager.AddToRoleAsync(usuario, "Approver");
+                await this._userManager.AddToRoleAsync(usuario, "Requester");
                 var usuarioRetornado = this.contenedorTrabajo.Users.GetUsuarioByUserName(usuarioRegistroDto.NombreUsuario);
                 return _mapper.Map<DataUserDto>(usuarioRetornado);
             }

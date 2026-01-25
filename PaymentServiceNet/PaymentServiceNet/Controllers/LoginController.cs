@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PaymentServiceNet.Application.Dtos;
@@ -6,6 +7,9 @@ using PaymentServiceNet.Application.Interfaces;
 
 namespace PaymentServiceNet.Controllers
 {
+    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}")]
     public class LoginController : ControllerBase
     {
 
