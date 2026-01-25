@@ -10,27 +10,33 @@ namespace PaymentServiceNet.Core.IRepositorio
     public interface IRepository<T> where T : class
     {
 
-        T Get(int id);
-        IEnumerable<T> GetAll(
-           Expression<Func<T, bool>> filter = null,
-           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-           string includeProperties = null
-         );
-        T GetFirstOrDefault(
-            Expression<Func<T, bool>> filter = null,
-            string includeProperties = null
-        );
-
         void Add(T entity);
+        Task AddAsync(T entity, CancellationToken ct = default);
 
         void Update(T entity);
 
-        void Remove(int id);
+        T Get(int id);
+        Task<T?> GetAsync(int id, CancellationToken ct = default);
 
+        IEnumerable<T> GetAll(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = null);
+
+        Task<IReadOnlyList<T>> GetAllAsync(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = null,
+            bool asNoTracking = true,
+            CancellationToken ct = default);
+
+        T GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null);
+        Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null, string includeProperties = null, bool asNoTracking = true, CancellationToken ct = default);
+
+        void Remove(int id);
         void Remove(T entity);
 
-        IEnumerable<object> GetAllSelectLoading();
-
         bool Exists(Expression<Func<T, bool>> filter);
+        Task<bool> ExistsAsync(Expression<Func<T, bool>> filter, CancellationToken ct = default);
     }
 }

@@ -16,12 +16,12 @@ namespace PaymentServiceNet.Application.Services
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
-        private readonly UserManager<AppUsuario> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork contenedorTrabajo;
         private IConfiguration _config;
 
         private readonly RoleManager<IdentityRole> _roleManager;
-        public UserService(IUnitOfWork unitOfWork, IConfiguration config, UserManager<AppUsuario> userManager, IMapper mapper , RoleManager<IdentityRole> roleManager)
+        public UserService(IUnitOfWork unitOfWork, IConfiguration config, UserManager<User> userManager, IMapper mapper , RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -47,7 +47,7 @@ namespace PaymentServiceNet.Application.Services
             var roles = await this._userManager.GetRolesAsync(usuario);
             var manejadorToken = new JwtSecurityTokenHandler();
             string keyconfig = _config.GetSection("ApiSettings:Secreta").Value.ToString();
-            //string key2 = _config.GetValue<string>("ApiSettings:Secreta");
+ 
             var key = Encoding.ASCII.GetBytes(keyconfig); 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -57,7 +57,7 @@ namespace PaymentServiceNet.Application.Services
                     new(ClaimTypes.Role, roles.FirstOrDefault())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new (new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             };
             var token = manejadorToken.CreateToken(tokenDescriptor);
             UsuarioLoginRespuestaDto usuarioLoginRespuestaDto = new UsuarioLoginRespuestaDto()
@@ -68,14 +68,15 @@ namespace PaymentServiceNet.Application.Services
             };
             return usuarioLoginRespuestaDto;
         }
+
         public async Task<DataUserDto> Registro(UsuarioRegistroDto usuarioRegistroDto)
         {
-            AppUsuario usuario = new()
+            User usuario = new()
             {
                 UserName = usuarioRegistroDto.NombreUsuario,
                 Email = usuarioRegistroDto.NombreUsuario,
                 NormalizedEmail = usuarioRegistroDto.NombreUsuario.ToUpper(),
-                Name = usuarioRegistroDto.Nombre,
+                NormalizedUserName = usuarioRegistroDto.Nombre,
             };
             var result = await this._userManager.CreateAsync(usuario, usuarioRegistroDto.Password);
             if (result.Succeeded)
@@ -92,12 +93,12 @@ namespace PaymentServiceNet.Application.Services
             return new DataUserDto();
         }
 
-        public  ICollection<AppUsuario> GetUsuarios()
+        public ICollection<User> GetUsuarios()
         {
             return this.contenedorTrabajo.Users.GetUsuarios();
         }
 
-        public AppUsuario GetUsuario(string id)
+        public User GetUsuario(string id)
         {
             return this.contenedorTrabajo.Users.GetUsuario(id);
         }

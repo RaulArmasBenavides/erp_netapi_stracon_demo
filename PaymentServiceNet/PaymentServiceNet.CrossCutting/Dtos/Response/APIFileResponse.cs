@@ -1,4 +1,4 @@
-﻿mnnmmnnamespace PaymentServiceNet.Application.Dtos.Response
+﻿namespace PaymentServiceNet.Application.Dtos.Response
 {
     public class APIFileResponse
     {

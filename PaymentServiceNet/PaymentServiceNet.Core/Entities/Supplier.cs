@@ -15,6 +15,9 @@ namespace PaymentServiceNet.Core.Entities
         public string Email { get; private set; }
         public string? PhotoId { get; private set; } // Cloudinary public_id o GUID
         public DateTimeOffset CreatedAt { get; private set; }
+        public bool IsApproved { get; private set; }
+        public DateTimeOffset? ApprovedAt { get; private set; }
+        public string? ApprovedBy { get; private set; }
 
         // Navegación de dominio (opcional). En DDD suele ser agregado raíz.
         private readonly List<PurchaseRequest> _purchaseRequests = new();
@@ -48,6 +51,24 @@ namespace PaymentServiceNet.Core.Entities
             Address = Guard.NotNullOrWhiteSpace(address, nameof(address));
             Phone = Guard.NotNullOrWhiteSpace(phone, nameof(phone));
             Email = Guard.NotNullOrWhiteSpace(email, nameof(email));
+        }
+
+
+        public void Approve(string approvedBy)
+        {
+            if (IsApproved) return; // idempotente
+
+            ApprovedBy = Guard.NotNullOrWhiteSpace(approvedBy, nameof(approvedBy));
+            ApprovedAt = DateTimeOffset.UtcNow;
+            IsApproved = true;
+        }
+
+        // Opcional: por si necesitas revertir
+        public void RevokeApproval()
+        {
+            IsApproved = false;
+            ApprovedAt = null;
+            ApprovedBy = null;
         }
 
         public void SetPhoto(string? photoId)

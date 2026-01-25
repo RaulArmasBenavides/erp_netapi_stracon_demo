@@ -15,15 +15,15 @@ public class Program
     {
         public PeliculasMapper()
         {
-            CreateMap<AppUsuario, UserDto>().ReverseMap();
-            CreateMap<AppUsuario, DataUserDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, DataUserDto>().ReverseMap();
         }
     }
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         //Soporte para autenticación con .NET Identity
-        builder.Services.AddIdentity<AppUsuario, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+        builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
         builder.Services.AddApplicationServices(builder.Configuration);
         builder.Services.AddPersistence(builder.Configuration);
         builder.Services.AddCustomResponseCompression();

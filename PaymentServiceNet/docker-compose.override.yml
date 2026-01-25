@@ -1,13 +1,37 @@
-name: PaymentServiceNet
+name: stracon-net
 version: "3.9"
 
 services:
-  movies:
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: "http://0.0.0.0:80"
-      ConnectionStrings__ConexionSQL: "Server=host.docker.internal,1433;Database=PaymentServiceNetNET7;User Id=sa;Password=sasasa;Encrypt=False"
+  straconapinet:
+    image: ${DOCKER_REGISTRY-}stracon_net
+    build:
+      context: .
+      dockerfile: PaymentServiceNet/Dockerfile
     ports:
-      - "8000:80" 
+      - "8000:80"
+    depends_on:
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__ConexionSQL: "Server=sqlserver,1433;Database=stracon_db;User Id=sa;Password=sasasa;Encrypt=False;TrustServerCertificate=True"
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: stracon-sqlserver
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "sasasa"
+      MSSQL_PID: "Express"
+    ports:
+      - "14333:1433"   # para conectarte desde tu PC (opcional)
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - stracon_sql_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P sasasa -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  stracon_sql_data:

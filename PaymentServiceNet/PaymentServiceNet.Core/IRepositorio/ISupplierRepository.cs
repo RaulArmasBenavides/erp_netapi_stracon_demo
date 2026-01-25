@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaymentServiceNet.Core.IRepositorio
 {
-    public interface ISupplierRepository
+    public interface ISupplierRepository : IRepository<Supplier>
     {
         Task<Supplier?> GetByIdAsync(Guid id, CancellationToken ct = default);
         Task<Supplier?> GetByEmailAsync(string email, CancellationToken ct = default);

@@ -4,10 +4,10 @@ namespace PaymentServiceNet.Core.IRepositorio
 {
     public interface IUserRepository
     {
-        ICollection<AppUsuario> GetUsuarios();
-        AppUsuario GetUsuario(string usuarioId);
+        ICollection<User> GetUsuarios();
+        User GetUsuario(string usuarioId);
 
-        AppUsuario GetUsuarioByUserName(string userName);
+        User GetUsuarioByUserName(string userName);
         bool IsUniqueUser(string usuario);
    
         //Task<UsuarioLoginRespuestaDto> Login(UsuarioLoginDto usuarioLoginDto);

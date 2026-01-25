@@ -22,14 +22,6 @@ namespace PaymentServiceNet.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
-        [HttpGet("check-protocol")]
-        public IActionResult CheckProtocol()
-        {
-            return Ok($"Protocol used: {this.HttpContext.Request.Protocol}");
-        }
-
-
         [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

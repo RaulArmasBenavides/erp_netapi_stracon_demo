@@ -20,24 +20,24 @@ namespace PaymentServiceNet.Repositorio
             //_roleManager = roleManager;
         }
 
-        public AppUsuario GetUsuario(string usuarioId)
+        public User GetUsuario(string usuarioId)
         {
-            return _bd.AppUsuario.FirstOrDefault(c => c.Id == usuarioId);
+            return _bd.Users.FirstOrDefault(c => c.Id == usuarioId);
         }
 
-        public AppUsuario GetUsuarioByUserName(string userName)
+        public User GetUsuarioByUserName(string userName)
         {
-           return _bd.AppUsuario.FirstOrDefault(u => u.UserName == userName);
+           return _bd.Users.FirstOrDefault(u => u.UserName == userName);
         }
 
-        public ICollection<AppUsuario> GetUsuarios()
+        public ICollection<User> GetUsuarios()
         {
-            return _bd.AppUsuario.OrderBy(c => c.Name).ToList();
+            return _bd.Users.OrderBy(c => c.NormalizedUserName).ToList();
         }
 
         public bool IsUniqueUser(string usuario)
         {
-            var usuariobd = _bd.AppUsuario.FirstOrDefault(u => u.Name== usuario);
+            var usuariobd = _bd.Users.FirstOrDefault(u => u.NormalizedUserName == usuario);
             if (usuariobd == null)
             {
                 return true;

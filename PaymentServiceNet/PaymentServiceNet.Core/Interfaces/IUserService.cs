@@ -15,8 +15,8 @@ namespace PaymentServiceNet.Application.Interfaces
 
         Task<UsuarioLoginRespuestaDto> Login(LoginUserDto usuarioLoginDto);
 
-        ICollection<AppUsuario> GetUsuarios();
+        ICollection<User> GetUsuarios();
 
-        AppUsuario GetUsuario(string id);
+        User GetUsuario(string id);
     }
 }

@@ -4,16 +4,20 @@ using PaymentServiceNet.Core.Entities;
 using PaymentServiceNet.Core.IRepositorio;
 using PaymentServiceNet.CrossCutting;
 using PaymentServiceNet.Infrastructure.Data;
+using PaymentServiceNet.Infrastructure.Repositorio;
 using System;
 
 namespace PaymentServiceNet.Repositorio
 {
-    public class SupplierRepository : ISupplierRepository
+    public class SupplierRepository: Repository<Supplier>, ISupplierRepository
     {
+   
         private readonly ApplicationDbContext _db;
 
-   
-        public SupplierRepository(ApplicationDbContext db) => _db = db;
+        public SupplierRepository(ApplicationDbContext mbd) : base(mbd)
+        {
+            _db = mbd;
+        }
 
         public Task<Supplier?> GetByIdAsync(Guid id, CancellationToken ct = default)
             => _db.Suppliers
