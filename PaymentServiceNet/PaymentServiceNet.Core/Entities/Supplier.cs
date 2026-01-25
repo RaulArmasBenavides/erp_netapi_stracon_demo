@@ -15,6 +15,8 @@ namespace PaymentServiceNet.Core.Entities
         public string Email { get; private set; }
         public string? PhotoId { get; private set; } // Cloudinary public_id o GUID
         public DateTimeOffset CreatedAt { get; private set; }
+
+        public string? CreatedBy { get; private set; }
         public bool IsApproved { get; private set; }
         public DateTimeOffset? ApprovedAt { get; private set; }
         public string? ApprovedBy { get; private set; }
@@ -32,7 +34,8 @@ namespace PaymentServiceNet.Core.Entities
             string phone,
             string email,
             string? photoId = null,
-            DateTimeOffset? createdAt = null)
+            DateTimeOffset? createdAt = null,
+            string? createdBy = null)
         {
             Id = id == Guid.Empty ? Guid.NewGuid() : id;
 
@@ -43,6 +46,7 @@ namespace PaymentServiceNet.Core.Entities
 
             PhotoId = photoId;
             CreatedAt = createdAt ?? DateTimeOffset.UtcNow;
+            CreatedBy = createdBy;
         }
 
         public void UpdateInfo(string name, string address, string phone, string email)
