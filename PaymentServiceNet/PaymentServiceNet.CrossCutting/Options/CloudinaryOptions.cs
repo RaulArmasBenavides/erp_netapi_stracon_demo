@@ -11,13 +11,9 @@ namespace SupplierServiceNet.CrossCutting.Options
         public string CloudName { get; init; } = default!;
         public string ApiKey { get; init; } = default!;
         public string ApiSecret { get; init; } = default!;
-
-        // Opcionales
         public string DefaultFolder { get; init; } = "stracon";
+        public string SuppliersFolder { get; init; } = "suppliers";  
         public string? LogoPublicId { get; init; }
-
-        public string? ProtectedRentingPublicId { get; init; }
-        public string? ProtectedEmploymentPublicId { get; init; }
-        public string? ProtectedSocialHelpPublicId { get; init; }
+ 
     }
 }

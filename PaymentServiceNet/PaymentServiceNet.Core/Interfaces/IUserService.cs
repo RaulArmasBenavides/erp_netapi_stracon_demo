@@ -15,8 +15,9 @@ namespace SupplierServiceNet.Application.Interfaces
 
         Task<UsuarioLoginRespuestaDto> Login(LoginUserDto usuarioLoginDto);
 
-        ICollection<User> GetUsuarios();
 
+
+        Task<ICollection<UserDto>> GetUsuariosAsync();
         User GetUsuario(string id);
     }
 }

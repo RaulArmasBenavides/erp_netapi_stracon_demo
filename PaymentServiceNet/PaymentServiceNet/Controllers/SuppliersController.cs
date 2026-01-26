@@ -57,14 +57,13 @@ namespace SupplierServiceNet.Controllers
             return Ok(supplier);
         }
 
-        // POST: api/suppliers
         [Authorize(Roles = "Requester,Approver")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> CreateSupplier([FromBody] CreateSupplierDto dto, CancellationToken ct)
+        public async Task<IActionResult> CreateSupplier([FromForm] CreateSupplierDto dto, CancellationToken ct)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

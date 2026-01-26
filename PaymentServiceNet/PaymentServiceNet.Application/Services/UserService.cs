@@ -17,7 +17,7 @@ namespace SupplierServiceNet.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        private readonly IUnitOfWork contenedorTrabajo;
+        private readonly IUnitOfWork _unitOfWork;
         private IConfiguration _config;
 
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -25,7 +25,7 @@ namespace SupplierServiceNet.Application.Services
         {
             _userManager = userManager;
             _mapper = mapper;
-            contenedorTrabajo = unitOfWork;
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _config = config;
             _roleManager = roleManager;
@@ -33,7 +33,7 @@ namespace SupplierServiceNet.Application.Services
 
         public async Task<UsuarioLoginRespuestaDto> Login(LoginUserDto usuarioLoginDto)
         {
-            var usuario = this.contenedorTrabajo.Users.GetUsuarioByUserName(usuarioLoginDto.UserName.ToLower());
+            var usuario = this._unitOfWork.Users.GetUsuarioByUserName(usuarioLoginDto.UserName.ToLower());
             bool isValid = await _userManager.CheckPasswordAsync(usuario, usuarioLoginDto.Password);
             if (usuario == null || !isValid )
             {
@@ -89,7 +89,7 @@ namespace SupplierServiceNet.Application.Services
                 await EnsureRoleExistsAsync("Requester");
                 await EnsureRoleExistsAsync("Approver");
                 await this._userManager.AddToRoleAsync(usuario, "Requester");
-                var usuarioRetornado = this.contenedorTrabajo.Users.GetUsuarioByUserName(usuarioRegistroDto.NombreUsuario);
+                var usuarioRetornado = this._unitOfWork.Users.GetUsuarioByUserName(usuarioRegistroDto.NombreUsuario);
                 return _mapper.Map<DataUserDto>(usuarioRetornado);
             }
             return new DataUserDto();
@@ -101,14 +101,33 @@ namespace SupplierServiceNet.Application.Services
                 await _roleManager.CreateAsync(new IdentityRole(roleName));
         }
 
-        public ICollection<User> GetUsuarios()
+
+        public async Task<ICollection<UserDto>> GetUsuariosAsync()
         {
-            return this.contenedorTrabajo.Users.GetUsuarios();
+            var usuarios = _userManager.Users.ToList();
+            var usuariosDto = new List<UserDto>();
+
+            foreach (var usuario in usuarios)
+            {
+                var roles = _userManager.GetRolesAsync(usuario).GetAwaiter().GetResult();
+
+                usuariosDto.Add(new UserDto
+                {
+                    Id = usuario.Id,
+                    UserName = usuario.UserName,
+                    Email = usuario.Email,
+                    PhoneNumber = usuario.PhoneNumber,
+                    Role = roles.FirstOrDefault() ?? "Sin rol"
+                });
+            }
+
+            return usuariosDto;
         }
+
 
         public User GetUsuario(string id)
         {
-            return this.contenedorTrabajo.Users.GetUsuario(id);
+            return this._unitOfWork.Users.GetUsuario(id);
         }
     }
 }

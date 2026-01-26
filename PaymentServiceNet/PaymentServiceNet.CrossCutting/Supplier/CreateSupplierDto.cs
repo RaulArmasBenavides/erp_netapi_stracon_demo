@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -21,7 +22,6 @@ namespace SupplierServiceNet.CrossCutting.Supplier
         [Required, EmailAddress]
         public string Email { get; set; } = default!;
 
-        // opcional
-        public string? PhotoId { get; set; }
+        public IFormFile? Photo { get; set; } // <- nueva propiedad
     }
 }

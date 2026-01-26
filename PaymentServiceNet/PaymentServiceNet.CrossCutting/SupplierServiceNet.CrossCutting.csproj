@@ -21,4 +21,7 @@
     <!-- Escribir versionamiento en archivo AssemblyInfo -->
     <WriteLinesToFile File="$(AssemblyInfo)" Lines="$([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace($(AssemblyInfoContent), $(AssemblyFileRegex), $(AssemblyFile))), $(AssemblyInformationalRegex), $(AssemblyInformational))), $(AssemblyVersionRegex), $(AssemblyVersion)))" Overwrite="true" />
   </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
 </Project>

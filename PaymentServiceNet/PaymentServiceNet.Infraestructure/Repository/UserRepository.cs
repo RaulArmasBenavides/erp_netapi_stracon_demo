@@ -3,6 +3,7 @@ using SupplierServiceNet.Core.Entities;
 using SupplierServiceNet.Infrastructure.Data;
 using Microsoft.Extensions.Configuration;
 using SupplierServiceNet.Core.IRepositorio;
+using Microsoft.EntityFrameworkCore;
 
 namespace SupplierServiceNet.Repositorio
 {
@@ -44,7 +45,7 @@ namespace SupplierServiceNet.Repositorio
             }
             return false;
         }
-
+ 
 
         //Método para encriptar contraseña con MD5 se usa tanto en el Acceso como en el Registro
         //public static string obtenermd5(string valor)

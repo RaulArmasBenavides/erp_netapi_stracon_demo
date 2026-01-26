@@ -1,6 +1,8 @@
-﻿using SupplierServiceNet.Core.Entities;
+﻿using Microsoft.Extensions.Options;
+using SupplierServiceNet.Core.Entities;
 using SupplierServiceNet.Core.Interfaces;
 using SupplierServiceNet.Core.IRepositorio;
+using SupplierServiceNet.CrossCutting.Options;
 using SupplierServiceNet.CrossCutting.Supplier;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,13 @@ namespace SupplierServiceNet.Application.Services
     public sealed class SupplierService : ISupplierService
     {
         private readonly IUnitOfWork _uow;
-
-        public SupplierService(IUnitOfWork uow)
+        private readonly ICloudinaryService _cloudinaryService;
+        private readonly CloudinaryOptions _cloudinaryOptions;
+        public SupplierService(IUnitOfWork uow, ICloudinaryService cloudinaryService, IOptions<CloudinaryOptions> cloudinaryOptions)
         {
             _uow = uow;
+            _cloudinaryService = cloudinaryService;
+            _cloudinaryOptions = cloudinaryOptions.Value;
         }
 
         public async Task<IReadOnlyList<Supplier>> GetAllAsync(CancellationToken ct = default)
@@ -37,6 +42,17 @@ namespace SupplierServiceNet.Application.Services
 
         public async Task<Supplier> CreateAsync(CreateSupplierDto dto, CancellationToken ct = default)
         {
+            string? photoId = null;
+
+            // Si hay una imagen, subirla a Cloudinary
+            if (dto.Photo != null)
+            {
+                // Usar el servicio de Cloudinary
+                var uploadResult = await _cloudinaryService.UploadImageAsync(dto.Photo, _cloudinaryOptions.SuppliersFolder, ct);
+                // Asumiendo que uploadResult tiene una propiedad PublicId
+                photoId = uploadResult.PublicId;
+            }
+
             // Dominio: construyes entidad con constructor
             var supplier = new Supplier(
                 id: Guid.NewGuid(),
@@ -44,7 +60,7 @@ namespace SupplierServiceNet.Application.Services
                 address: dto.Address,
                 phone: dto.Phone,
                 email: dto.Email,
-                photoId: dto.PhotoId
+                photoId: photoId  // Asignamos el public_id de Cloudinary
             );
 
             await _uow.Suppliers.AddAsync(supplier);

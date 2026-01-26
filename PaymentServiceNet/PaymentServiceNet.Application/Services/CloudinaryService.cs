@@ -109,16 +109,6 @@ namespace SupplierServiceNet.Application.Services
         public async Task DeleteResourceAsync(string publicId, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(publicId)) return;
-
-            var protectedIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-            {
-                _opt.ProtectedRentingPublicId ?? string.Empty,
-                _opt.ProtectedEmploymentPublicId ?? string.Empty,
-                _opt.ProtectedSocialHelpPublicId ?? string.Empty,
-            };
-
-            if (protectedIds.Contains(publicId)) return;
-
             try
             {
                 var delParams = new DeletionParams(publicId) { Invalidate = true };

@@ -5,6 +5,7 @@ using SupplierServiceNet.Application.Interfaces;
 using SupplierServiceNet.Application.Services;
 using SupplierServiceNet.Core.Interfaces;
 using SupplierServiceNet.Core.IRepositorio;
+using SupplierServiceNet.CrossCutting.Options;
 using SupplierServiceNet.Repositorio;
 using System.Text;
 
@@ -15,7 +16,9 @@ namespace SupplierServiceNet.Extensions
 
         public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-         
+
+            services.Configure<CloudinaryOptions>(configuration.GetSection("Cloudinary"));
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISupplierService, SupplierService>();

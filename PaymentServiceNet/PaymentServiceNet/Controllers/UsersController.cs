@@ -31,15 +31,9 @@ namespace SupplierServiceNet.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetUsers()
         {
-            var listaUsuarios = this.usService.GetUsuarios();
+            var listaUsuarios = this.usService.GetUsuariosAsync();
 
-            var listaUsuariosDto = new List<UserDto>();
-
-            foreach (var lista in listaUsuarios)
-            {
-                listaUsuariosDto.Add(_mapper.Map<UserDto>(lista));
-            }
-            return Ok(listaUsuariosDto);
+            return Ok(listaUsuarios);
         }
 
         [Authorize(Roles = "Approver")]
