@@ -8,6 +8,7 @@
  
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
+        public DateTime Created { get; set; }
 
         public string Role { get; set; }
         
