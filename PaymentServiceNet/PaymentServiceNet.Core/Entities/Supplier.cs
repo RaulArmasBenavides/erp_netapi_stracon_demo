@@ -13,7 +13,7 @@ namespace SupplierServiceNet.Core.Entities
         public string Address { get; private set; }
         public string Phone { get; private set; }
         public string Email { get; private set; }
-        public string? PhotoId { get; private set; } // Cloudinary public_id o GUID
+        public string? Photo { get; private set; } // Cloudinary public_id o GUID
         public DateTimeOffset CreatedAt { get; private set; }
 
         public string? CreatedBy { get; private set; }
@@ -44,7 +44,7 @@ namespace SupplierServiceNet.Core.Entities
             Phone = Guard.NotNullOrWhiteSpace(phone, nameof(phone));
             Email = Guard.NotNullOrWhiteSpace(email, nameof(email));
 
-            PhotoId = photoId;
+            Photo = photoId;
             CreatedAt = createdAt ?? DateTimeOffset.UtcNow;
             CreatedBy = createdBy;
         }
@@ -77,7 +77,7 @@ namespace SupplierServiceNet.Core.Entities
 
         public void SetPhoto(string? photoId)
         {
-            PhotoId = photoId;
+            Photo = photoId;
         }
 
         public PurchaseRequest CreatePurchaseRequest(Guid requestedByUserId, string description)
