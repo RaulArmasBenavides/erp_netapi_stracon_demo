@@ -50,7 +50,7 @@ namespace SupplierServiceNet.Application.Services
                 // Usar el servicio de Cloudinary
                 var uploadResult = await _cloudinaryService.UploadImageAsync(dto.Photo, _cloudinaryOptions.SuppliersFolder, ct);
                 // Asumiendo que uploadResult tiene una propiedad PublicId
-                photoId = uploadResult.PublicId;
+                photoId = uploadResult.Url;
             }
 
             // Dominio: construyes entidad con constructor

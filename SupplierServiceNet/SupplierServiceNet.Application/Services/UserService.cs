@@ -33,9 +33,13 @@ namespace SupplierServiceNet.Application.Services
 
         public async Task<UsuarioLoginRespuestaDto> Login(LoginUserDto usuarioLoginDto)
         {
-            var usuario = this._unitOfWork.Users.GetUsuarioByUserName(usuarioLoginDto.UserName.ToLower());
-            bool isValid = await _userManager.CheckPasswordAsync(usuario, usuarioLoginDto.Password);
-            if (usuario == null || !isValid )
+            // Normalizar el input
+            var normalizedInput = usuarioLoginDto.UserName.ToLower();
+
+            // Buscar usuario por username o email
+            var usuario = await _unitOfWork.Users.GetUsuarioByUserNameOrEmailAsync(normalizedInput);
+
+            if (usuario == null)
             {
                 return new UsuarioLoginRespuestaDto()
                 {
@@ -43,29 +47,45 @@ namespace SupplierServiceNet.Application.Services
                     User = null
                 };
             }
-            //Aquí existe el usuario entonces podemos procesar el login
+
+            // Verificar contraseña
+            bool isValid = await _userManager.CheckPasswordAsync(usuario, usuarioLoginDto.Password);
+
+            if (!isValid)
+            {
+                return new UsuarioLoginRespuestaDto()
+                {
+                    Access_token = "",
+                    User = null
+                };
+            }
+
+            // Aquí existe el usuario y la contraseña es válida
             var roles = await this._userManager.GetRolesAsync(usuario);
             var manejadorToken = new JwtSecurityTokenHandler();
             string keyconfig = _config.GetSection("ApiSettings:Secreta").Value.ToString();
- 
-            var key = Encoding.ASCII.GetBytes(keyconfig); 
+
+            var key = Encoding.ASCII.GetBytes(keyconfig);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new(ClaimTypes.Name, usuario.UserName.ToString()),
-                    new(ClaimTypes.Role, roles.FirstOrDefault())
+            new Claim(ClaimTypes.Name, usuario.UserName.ToString()),
+            new Claim(ClaimTypes.Email, usuario.Email.ToString()),
+            new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? string.Empty)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new (new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             };
+
             var token = manejadorToken.CreateToken(tokenDescriptor);
+
             UsuarioLoginRespuestaDto usuarioLoginRespuestaDto = new UsuarioLoginRespuestaDto()
             {
                 Access_token = manejadorToken.WriteToken(token),
-                User = _mapper.Map<DataUserDto>(usuario),
-
+                User = _mapper.Map<DataUserDto>(usuario)
             };
+
             return usuarioLoginRespuestaDto;
         }
 

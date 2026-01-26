@@ -1,9 +1,10 @@
-﻿using System.Data;
-using SupplierServiceNet.Core.Entities;
-using SupplierServiceNet.Infrastructure.Data;
-using Microsoft.Extensions.Configuration;
-using SupplierServiceNet.Core.IRepositorio;
+﻿using DocumentFormat.OpenXml.InkML;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SupplierServiceNet.Core.Entities;
+using SupplierServiceNet.Core.IRepositorio;
+using SupplierServiceNet.Infrastructure.Data;
+using System.Data;
 
 namespace SupplierServiceNet.Repositorio
 {
@@ -31,6 +32,13 @@ namespace SupplierServiceNet.Repositorio
            return _bd.Users.FirstOrDefault(u => u.UserName == userName);
         }
 
+        public async Task<User> GetUsuarioByUserNameOrEmailAsync(string usernameOrEmail)
+        {
+            return await _bd.Users
+                .FirstOrDefaultAsync(u =>
+                    u.UserName.ToLower() == usernameOrEmail.ToLower() ||
+                    u.Email.ToLower() == usernameOrEmail.ToLower());
+        }
         public ICollection<User> GetUsuarios()
         {
             return _bd.Users.OrderBy(c => c.NormalizedUserName).ToList();

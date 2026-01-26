@@ -7,6 +7,6 @@ namespace SupplierServiceNet.Core.Entities
 
         public DateTime CreatedAt { get; set; }
         // Navegación a roles
-        public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; }
+        //public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; }
     }
 }

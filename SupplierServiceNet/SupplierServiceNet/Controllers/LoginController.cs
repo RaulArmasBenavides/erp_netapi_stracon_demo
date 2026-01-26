@@ -31,19 +31,6 @@ namespace SupplierServiceNet.Controllers
         public async Task<IActionResult> Login([FromBody] LoginUserDto usuarioLoginDto)
         {
             var rptaservice = await this.usService.Login(usuarioLoginDto);
-            //var respuestaLogin = await _usRepo.Login(usuarioLoginDto);
-
-            //if (respuestaLogin.User == null || string.IsNullOrEmpty(respuestaLogin.Token))
-            //{
-            //    _respuestaApi.StatusCode = HttpStatusCode.BadRequest;
-            //    _respuestaApi.IsSuccess = false;
-            //    _respuestaApi.ErrorMessages.Add("El nombre de usuario o password son incorrectos");
-            //    return BadRequest(_respuestaApi);
-            //}           
-
-            //_respuestaApi.StatusCode = HttpStatusCode.OK;
-            //_respuestaApi.IsSuccess = true;
-            //_respuestaApi.Result = respuestaLogin;
             return Ok(rptaservice);
         }
     }
