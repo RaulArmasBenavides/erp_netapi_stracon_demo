@@ -17,7 +17,7 @@ namespace SupplierServiceNet.Seed
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 var userManager = services.GetRequiredService<UserManager<User>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
+      
                 // Aplicar migraciones pendientes
                 await context.Database.MigrateAsync();
 
@@ -51,6 +51,32 @@ namespace SupplierServiceNet.Seed
                 }
             }
         }
+        private static async Task WaitForDatabaseAsync(ApplicationDbContext context)
+        {
+            int maxAttempts = 30;
+            int delay = 2000; // 2 segundos
+
+            for (int i = 0; i < maxAttempts; i++)
+            {
+                try
+                {
+                    // Intenta abrir la conexión
+                    if (context.Database.CanConnect())
+                    {
+                        Console.WriteLine("✓ Conexión a la base de datos exitosa.");
+                        return;
+                    }
+                }
+                catch (Exception)
+                {
+                    // Si hay error, esperar y reintentar
+                    Console.WriteLine($"✗ Intento {i + 1} de {maxAttempts}: No se pudo conectar a la base de datos. Reintentando en {delay / 1000} segundos...");
+                    await Task.Delay(delay);
+                }
+            }
+
+            throw new Exception("No se pudo conectar a la base de datos después de múltiples intentos.");
+        }
 
         private static async Task EnsureDefaultUsersAsync(UserManager<User> userManager)
         {
@@ -82,7 +108,7 @@ namespace SupplierServiceNet.Seed
             }
 
             // Usuario Approver (Raul Armas)
-            var approverEmail = "raul.armas@stracon.com";
+            var approverEmail = "admin@stracon.com";
             var approverUser = await userManager.FindByEmailAsync(approverEmail);
 
             if (approverUser == null)
@@ -108,32 +134,7 @@ namespace SupplierServiceNet.Seed
                 }
             }
 
-            // Usuario Admin (opcional)
-            var adminEmail = "admin@stracon.com";
-            var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-            if (adminUser == null)
-            {
-                adminUser = new User
-                {
-                    UserName = adminEmail,
-                    Email = adminEmail,
-                    NormalizedUserName = "Administrador",
-                    EmailConfirmed = true,
-                    CreatedAt = DateTime.UtcNow,
-                };
-
-                var result = await userManager.CreateAsync(adminUser, "Admin123!");
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(adminUser, "Admin");
-                    Console.WriteLine($"✓ Usuario '{adminEmail}' creado (Rol: Admin)");
-                }
-                else
-                {
-                    Console.WriteLine($"✗ Error creando usuario '{adminEmail}': {string.Join(", ", result.Errors)}");
-                }
-            }
+    
         }
     }
 }

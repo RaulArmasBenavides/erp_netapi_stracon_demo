@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PaymentServiceNet.CrossCutting\SupplierServiceNet.CrossCutting.csproj" />
+    <ProjectReference Include="..\SupplierServiceNet.CrossCutting\SupplierServiceNet.CrossCutting.csproj" />
   </ItemGroup>
   <!-- Script Creado por Raúl Armas-->
   <Target Name="AssemblyVersion" BeforeTargets="CoreCompile" DependsOnTargets="PrepareForBuild">

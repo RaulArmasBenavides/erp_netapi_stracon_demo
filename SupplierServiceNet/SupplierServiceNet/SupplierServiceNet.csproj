@@ -31,9 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PaymentServiceNet.Application\SupplierServiceNet.Application.csproj" />
-    <ProjectReference Include="..\PaymentServiceNet.Core\SupplierServiceNet.Core.csproj" />
-    <ProjectReference Include="..\PaymentServiceNet.CrossCutting\SupplierServiceNet.CrossCutting.csproj" />
+    <ProjectReference Include="..\SupplierServiceNet.Application\SupplierServiceNet.Application.csproj" />
+    <ProjectReference Include="..\SupplierServiceNet.Core\SupplierServiceNet.Core.csproj" />
+    <ProjectReference Include="..\SupplierServiceNet.CrossCutting\SupplierServiceNet.CrossCutting.csproj" />
   </ItemGroup>
   <!-- Script Creado por Raúl Armas-->
   <Target Name="AssemblyVersion" BeforeTargets="CoreCompile" DependsOnTargets="PrepareForBuild">

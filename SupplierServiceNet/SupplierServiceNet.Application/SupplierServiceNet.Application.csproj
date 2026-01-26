@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PaymentServiceNet.Core\SupplierServiceNet.Core.csproj" />
-    <ProjectReference Include="..\PaymentServiceNet.Infraestructure\SupplierServiceNet.Infrastructure.csproj" />
+    <ProjectReference Include="..\SupplierServiceNet.Core\SupplierServiceNet.Core.csproj" />
+    <ProjectReference Include="..\SupplierServiceNet.Infraestructure\SupplierServiceNet.Infrastructure.csproj" />
   </ItemGroup>
   <!-- Script Creado por Raúl Armas-->
   <Target Name="AssemblyVersion" BeforeTargets="CoreCompile" DependsOnTargets="PrepareForBuild">
