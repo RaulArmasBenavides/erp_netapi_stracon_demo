@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PaymentServiceNet.Core\PaymentServiceNet.Core.csproj" />
-	<ProjectReference Include="..\PaymentServiceNet.CrossCutting\PaymentServiceNet.CrossCutting.csproj" />
+    <ProjectReference Include="..\PaymentServiceNet.Core\SupplierServiceNet.Core.csproj" />
+	<ProjectReference Include="..\PaymentServiceNet.CrossCutting\SupplierServiceNet.CrossCutting.csproj" />
   </ItemGroup>
 
   <ItemGroup>

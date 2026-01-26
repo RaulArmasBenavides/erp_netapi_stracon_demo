@@ -2,15 +2,15 @@
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using PaymentServiceNet.Core.Interfaces;
-using PaymentServiceNet.CrossCutting.Options;
+using SupplierServiceNet.Core.Interfaces;
+using SupplierServiceNet.CrossCutting.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.Application.Services
+namespace SupplierServiceNet.Application.Services
 {
     public sealed class CloudinaryService : ICloudinaryService
     {

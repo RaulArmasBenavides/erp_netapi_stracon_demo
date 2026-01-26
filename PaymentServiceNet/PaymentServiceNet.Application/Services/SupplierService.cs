@@ -1,14 +1,14 @@
-﻿using PaymentServiceNet.Core.Entities;
-using PaymentServiceNet.Core.Interfaces;
-using PaymentServiceNet.Core.IRepositorio;
-using PaymentServiceNet.CrossCutting.Supplier;
+﻿using SupplierServiceNet.Core.Entities;
+using SupplierServiceNet.Core.Interfaces;
+using SupplierServiceNet.Core.IRepositorio;
+using SupplierServiceNet.CrossCutting.Supplier;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.Application.Services
+namespace SupplierServiceNet.Application.Services
 {
     public sealed class SupplierService : ISupplierService
     {

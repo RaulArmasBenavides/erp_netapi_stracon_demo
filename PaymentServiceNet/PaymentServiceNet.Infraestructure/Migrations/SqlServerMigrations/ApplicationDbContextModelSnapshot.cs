@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PaymentServiceNet.Infrastructure.Data;
+using SupplierServiceNet.Infrastructure.Data;
 
 #nullable disable
 
-namespace PaymentServiceNet.Infrastructure.Migrations.SqlServerMigrations
+namespace SupplierServiceNet.Infrastructure.Migrations.SqlServerMigrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

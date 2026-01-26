@@ -1,11 +1,11 @@
-﻿using PaymentServiceNet.Infrastructure.Repositorio;
-using PaymentServiceNet.Infrastructure.Repositorio.WorkContainer;
-using PaymentServiceNet.Infrastructure.Data;
+﻿using SupplierServiceNet.Infrastructure.Repositorio;
+using SupplierServiceNet.Infrastructure.Repositorio.WorkContainer;
+using SupplierServiceNet.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PaymentServiceNet.Core.IRepositorio;
-namespace PaymentServiceNet.Infrastructure
+using SupplierServiceNet.Core.IRepositorio;
+namespace SupplierServiceNet.Infrastructure
 {
     public static class DependencyInjection
     {

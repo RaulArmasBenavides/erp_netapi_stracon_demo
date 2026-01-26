@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.CrossCutting.Options
+namespace SupplierServiceNet.CrossCutting.Options
 {
     public sealed class CloudinaryOptions
     {

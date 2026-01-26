@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PaymentServiceNet.Application.Dtos
+namespace SupplierServiceNet.Application.Dtos
 {
     public class UsuarioRegistroDto
     {

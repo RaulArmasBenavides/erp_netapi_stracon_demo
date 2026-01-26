@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace PaymentServiceNet.Core.Entities
+namespace SupplierServiceNet.Core.Entities
 {
     public class User : IdentityUser
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.Core.Interfaces
+namespace SupplierServiceNet.Core.Interfaces
 {
     public interface ICloudinaryService
     {

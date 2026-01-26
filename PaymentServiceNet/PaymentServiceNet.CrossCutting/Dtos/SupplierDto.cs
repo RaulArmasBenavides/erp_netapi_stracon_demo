@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.CrossCutting.Dtos
+namespace SupplierServiceNet.CrossCutting.Dtos
 {
     public sealed class SupplierDto
     {

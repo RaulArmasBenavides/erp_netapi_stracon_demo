@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Security.Policy;
 
-namespace PaymentServiceNet.Extensions
+namespace SupplierServiceNet.Extensions
 {
     public static class SwaggerServicesExtensions
     {

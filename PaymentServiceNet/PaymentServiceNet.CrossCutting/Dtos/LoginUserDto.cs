@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PaymentServiceNet.Application.Dtos
+namespace SupplierServiceNet.Application.Dtos
 {
     public class LoginUserDto
     {
-        [Required(ErrorMessage = "El usuario es obligatorio")]
-        public string NombreUsuario { get; set; }
+        [Required(ErrorMessage = "UserName is required")]
+        public string UserName { get; set; }
+
         [Required(ErrorMessage = "El password es obligatorio")]      
         public string Password { get; set; }
        

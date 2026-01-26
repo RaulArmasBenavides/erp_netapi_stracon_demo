@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.Core.Entities
+namespace SupplierServiceNet.Core.Entities
 {
     public sealed class Supplier
     {

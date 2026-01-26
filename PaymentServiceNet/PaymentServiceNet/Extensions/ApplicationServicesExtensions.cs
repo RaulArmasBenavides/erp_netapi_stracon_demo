@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using PaymentServiceNet.Application.Interfaces;
-using PaymentServiceNet.Application.Services;
-using PaymentServiceNet.Core.Interfaces;
-using PaymentServiceNet.Core.IRepositorio;
-using PaymentServiceNet.Repositorio;
+using SupplierServiceNet.Application.Interfaces;
+using SupplierServiceNet.Application.Services;
+using SupplierServiceNet.Core.Interfaces;
+using SupplierServiceNet.Core.IRepositorio;
+using SupplierServiceNet.Repositorio;
 using System.Text;
 
-namespace PaymentServiceNet.Extensions
+namespace SupplierServiceNet.Extensions
 {
     public static class ApplicationServicesExtensions
     {

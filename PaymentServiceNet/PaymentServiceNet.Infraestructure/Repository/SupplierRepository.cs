@@ -1,13 +1,13 @@
 ﻿ 
 using Microsoft.EntityFrameworkCore;
-using PaymentServiceNet.Core.Entities;
-using PaymentServiceNet.Core.IRepositorio;
-using PaymentServiceNet.CrossCutting;
-using PaymentServiceNet.Infrastructure.Data;
-using PaymentServiceNet.Infrastructure.Repositorio;
+using SupplierServiceNet.Core.Entities;
+using SupplierServiceNet.Core.IRepositorio;
+using SupplierServiceNet.CrossCutting;
+using SupplierServiceNet.Infrastructure.Data;
+using SupplierServiceNet.Infrastructure.Repositorio;
 using System;
 
-namespace PaymentServiceNet.Repositorio
+namespace SupplierServiceNet.Repositorio
 {
     public class SupplierRepository: Repository<Supplier>, ISupplierRepository
     {

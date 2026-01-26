@@ -1,12 +1,12 @@
-﻿using PaymentServiceNet.Core.Entities;
-using PaymentServiceNet.CrossCutting.Supplier;
+﻿using SupplierServiceNet.Core.Entities;
+using SupplierServiceNet.CrossCutting.Supplier;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.Core.Interfaces
+namespace SupplierServiceNet.Core.Interfaces
 {
     public interface ISupplierService
     {

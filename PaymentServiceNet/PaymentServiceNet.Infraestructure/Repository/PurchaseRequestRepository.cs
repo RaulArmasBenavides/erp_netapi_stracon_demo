@@ -1,9 +1,9 @@
-﻿using PaymentServiceNet.Core.Entities;
-using PaymentServiceNet.Core.IRepositorio;
-using PaymentServiceNet.Infrastructure.Data;
+﻿using SupplierServiceNet.Core.Entities;
+using SupplierServiceNet.Core.IRepositorio;
+using SupplierServiceNet.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace PaymentServiceNet.Infrastructure.Repository
+namespace SupplierServiceNet.Infrastructure.Repository
 {
     public sealed class PurchaseRequestRepository : IPurchaseRequestRepository
     {

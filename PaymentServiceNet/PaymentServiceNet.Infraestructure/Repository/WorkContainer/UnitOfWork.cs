@@ -1,9 +1,9 @@
-﻿using PaymentServiceNet.Core.IRepositorio;
-using PaymentServiceNet.Infrastructure.Data;
-using PaymentServiceNet.Infrastructure.Repository;
-using PaymentServiceNet.Repositorio;
+﻿using SupplierServiceNet.Core.IRepositorio;
+using SupplierServiceNet.Infrastructure.Data;
+using SupplierServiceNet.Infrastructure.Repository;
+using SupplierServiceNet.Repositorio;
 
-namespace PaymentServiceNet.Infrastructure.Repositorio.WorkContainer
+namespace SupplierServiceNet.Infrastructure.Repositorio.WorkContainer
 {
     public class UnitOfWork : IUnitOfWork
     {

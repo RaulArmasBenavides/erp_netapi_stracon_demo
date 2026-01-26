@@ -1,4 +1,4 @@
-﻿namespace PaymentServiceNet.Extensions
+﻿namespace SupplierServiceNet.Extensions
 {
     public static class CorsConfigurationExtension
     {

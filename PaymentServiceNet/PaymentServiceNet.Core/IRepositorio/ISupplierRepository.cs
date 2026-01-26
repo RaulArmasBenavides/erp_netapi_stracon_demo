@@ -1,11 +1,11 @@
-﻿using PaymentServiceNet.Core.Entities;
+﻿using SupplierServiceNet.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.Core.IRepositorio
+namespace SupplierServiceNet.Core.IRepositorio
 {
     public interface ISupplierRepository : IRepository<Supplier>
     {

@@ -1,8 +1,8 @@
-﻿using PaymentServiceNet.Core.IRepositorio;
+﻿using SupplierServiceNet.Core.IRepositorio;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace PaymentServiceNet.Infrastructure.Repositorio
+namespace SupplierServiceNet.Infrastructure.Repositorio
 {
     public class Repository<T> : IRepository<T> where T : class
     {

@@ -1,7 +1,7 @@
-﻿using PaymentServiceNet.Application.Dtos;
-using PaymentServiceNet.Application.Interfaces;
-using PaymentServiceNet.Core.Entities;
-using PaymentServiceNet.Infrastructure.Repositorio.WorkContainer;
+﻿using SupplierServiceNet.Application.Dtos;
+using SupplierServiceNet.Application.Interfaces;
+using SupplierServiceNet.Core.Entities;
+using SupplierServiceNet.Infrastructure.Repositorio.WorkContainer;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -10,8 +10,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
-using PaymentServiceNet.Core.IRepositorio;
-namespace PaymentServiceNet.Application.Services
+using SupplierServiceNet.Core.IRepositorio;
+namespace SupplierServiceNet.Application.Services
 {
     public class UserService : IUserService
     {
@@ -33,7 +33,7 @@ namespace PaymentServiceNet.Application.Services
 
         public async Task<UsuarioLoginRespuestaDto> Login(LoginUserDto usuarioLoginDto)
         {
-            var usuario = this.contenedorTrabajo.Users.GetUsuarioByUserName(usuarioLoginDto.NombreUsuario.ToLower());
+            var usuario = this.contenedorTrabajo.Users.GetUsuarioByUserName(usuarioLoginDto.UserName.ToLower());
             bool isValid = await _userManager.CheckPasswordAsync(usuario, usuarioLoginDto.Password);
             if (usuario == null || !isValid )
             {

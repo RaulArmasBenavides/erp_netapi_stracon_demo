@@ -1,13 +1,13 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using PaymentServiceNet.Application.Dtos;
-using PaymentServiceNet.Core.Entities;
+using SupplierServiceNet.Application.Dtos;
+using SupplierServiceNet.Core.Entities;
  
-using PaymentServiceNet.Extensions;
-using PaymentServiceNet.Infrastructure;
-using PaymentServiceNet.Infrastructure.Data;
-using PaymentServiceNet.Middlewares;
+using SupplierServiceNet.Extensions;
+using SupplierServiceNet.Infrastructure;
+using SupplierServiceNet.Infrastructure.Data;
+using SupplierServiceNet.Middlewares;
 using Serilog;
 
 public class Program

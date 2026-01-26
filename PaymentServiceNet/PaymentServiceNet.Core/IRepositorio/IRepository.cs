@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.Core.IRepositorio
+namespace SupplierServiceNet.Core.IRepositorio
 {
     public interface IRepository<T> where T : class
     {

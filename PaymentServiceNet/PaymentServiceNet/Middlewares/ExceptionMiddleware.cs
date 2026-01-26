@@ -1,8 +1,8 @@
-﻿using PaymentServiceNet.Application.Dtos.Response;
+﻿using SupplierServiceNet.Application.Dtos.Response;
 using System.Net;
 using System.Text.Json;
 
-namespace PaymentServiceNet.Middlewares
+namespace SupplierServiceNet.Middlewares
 {
     public class ExceptionMiddleware
     {

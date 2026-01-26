@@ -2,10 +2,10 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PaymentServiceNet.Application.Dtos;
-using PaymentServiceNet.Application.Interfaces;
+using SupplierServiceNet.Application.Dtos;
+using SupplierServiceNet.Application.Interfaces;
 
-namespace PaymentServiceNet.Controllers
+namespace SupplierServiceNet.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]

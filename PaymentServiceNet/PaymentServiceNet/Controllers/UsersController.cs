@@ -2,11 +2,11 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PaymentServiceNet.Application.Dtos;
-using PaymentServiceNet.Application.Interfaces;
-using PaymentServiceNet.Core.Entities;
+using SupplierServiceNet.Application.Dtos;
+using SupplierServiceNet.Application.Interfaces;
+using SupplierServiceNet.Core.Entities;
 
-namespace PaymentServiceNet.Controllers
+namespace SupplierServiceNet.Controllers
 {
      
     [ApiController]
@@ -24,7 +24,7 @@ namespace PaymentServiceNet.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Approver")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -42,7 +42,7 @@ namespace PaymentServiceNet.Controllers
             return Ok(listaUsuariosDto);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Approver")]
         [HttpGet("{usuarioId:int}", Name = "GetUser")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -62,8 +62,8 @@ namespace PaymentServiceNet.Controllers
             return Ok(itemUsuarioDto);
         }
 
-        [AllowAnonymous]
-        [HttpPost("registro")]        
+        [Authorize(Roles = "Approver")]
+        [HttpPost("Approver")]        
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

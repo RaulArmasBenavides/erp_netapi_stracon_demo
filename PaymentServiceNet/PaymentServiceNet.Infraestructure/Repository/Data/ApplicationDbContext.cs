@@ -1,8 +1,8 @@
-﻿using PaymentServiceNet.Core.Entities;
+﻿using SupplierServiceNet.Core.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace PaymentServiceNet.Infrastructure.Data
+namespace SupplierServiceNet.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {

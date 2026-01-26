@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.IO.Compression;
 
-namespace PaymentServiceNet.Extensions
+namespace SupplierServiceNet.Extensions
 {
     public static class HealthCheckExtensions
     {

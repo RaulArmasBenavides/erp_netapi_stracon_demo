@@ -1,6 +1,6 @@
-﻿using PaymentServiceNet.Core.IRepositorio;
+﻿using SupplierServiceNet.Core.IRepositorio;
 
-namespace PaymentServiceNet.Core.IRepositorio
+namespace SupplierServiceNet.Core.IRepositorio
 {
     public interface IUnitOfWork : IDisposable
     {

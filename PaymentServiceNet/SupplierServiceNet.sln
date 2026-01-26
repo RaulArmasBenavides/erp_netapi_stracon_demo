@@ -10,15 +10,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{DB3DD628-9294-4DEF-B5A4-CD7FA3563FC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentServiceNet.Infrastructure", "PaymentServiceNet.Infraestructure\PaymentServiceNet.Infrastructure.csproj", "{D86B4428-E649-39DC-2EA4-D2019A35756F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplierServiceNet.Infrastructure", "PaymentServiceNet.Infraestructure\SupplierServiceNet.Infrastructure.csproj", "{D86B4428-E649-39DC-2EA4-D2019A35756F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentServiceNet.CrossCutting", "PaymentServiceNet.CrossCutting\PaymentServiceNet.CrossCutting.csproj", "{CE324C91-92CD-3C38-8A88-B58357C61EC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplierServiceNet.CrossCutting", "PaymentServiceNet.CrossCutting\SupplierServiceNet.CrossCutting.csproj", "{CE324C91-92CD-3C38-8A88-B58357C61EC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentServiceNet", "PaymentServiceNet\PaymentServiceNet.csproj", "{8040EFCD-5373-3F67-E6F5-FDCCA5E2F2DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplierServiceNet", "PaymentServiceNet\SupplierServiceNet.csproj", "{8040EFCD-5373-3F67-E6F5-FDCCA5E2F2DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentServiceNet.Core", "PaymentServiceNet.Core\PaymentServiceNet.Core.csproj", "{BB5B050D-3097-1B17-C027-E4D88A52ADD2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplierServiceNet.Core", "PaymentServiceNet.Core\SupplierServiceNet.Core.csproj", "{BB5B050D-3097-1B17-C027-E4D88A52ADD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentServiceNet.Application", "PaymentServiceNet.Application\PaymentServiceNet.Application.csproj", "{CDC75BDC-9FDF-BB31-D65E-631B79406D25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplierServiceNet.Application", "PaymentServiceNet.Application\SupplierServiceNet.Application.csproj", "{CDC75BDC-9FDF-BB31-D65E-631B79406D25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

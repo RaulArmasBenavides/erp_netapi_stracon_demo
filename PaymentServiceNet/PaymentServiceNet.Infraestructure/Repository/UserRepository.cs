@@ -1,10 +1,10 @@
 ﻿using System.Data;
-using PaymentServiceNet.Core.Entities;
-using PaymentServiceNet.Infrastructure.Data;
+using SupplierServiceNet.Core.Entities;
+using SupplierServiceNet.Infrastructure.Data;
 using Microsoft.Extensions.Configuration;
-using PaymentServiceNet.Core.IRepositorio;
+using SupplierServiceNet.Core.IRepositorio;
 
-namespace PaymentServiceNet.Repositorio
+namespace SupplierServiceNet.Repositorio
 {
     public class UserRepository : IUserRepository
     {

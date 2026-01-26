@@ -6,7 +6,7 @@ services:
     image: ${DOCKER_REGISTRY-}stracon_net
     build:
       context: .
-      dockerfile: PaymentServiceNet/Dockerfile
+      dockerfile: SupplierServiceNet/Dockerfile
     ports:
       - "8000:80"
     depends_on:

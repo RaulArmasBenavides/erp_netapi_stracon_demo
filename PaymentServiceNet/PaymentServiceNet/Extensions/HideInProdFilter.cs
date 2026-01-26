@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace PaymentServiceNet.Extensions
+namespace SupplierServiceNet.Extensions
 {
     public class HideInProdFilter : IDocumentFilter
     {

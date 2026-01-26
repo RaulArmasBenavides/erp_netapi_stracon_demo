@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentServiceNet.Infrastructure.Helper
+namespace SupplierServiceNet.Infrastructure.Helper
 {
     public class ClosedXMLExcelHelper : IExcelHelper
     {

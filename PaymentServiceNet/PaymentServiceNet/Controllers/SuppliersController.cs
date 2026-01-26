@@ -2,12 +2,12 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PaymentServiceNet.Core.Interfaces;
-using PaymentServiceNet.CrossCutting.Dtos;
-using PaymentServiceNet.CrossCutting.Supplier;
+using SupplierServiceNet.Core.Interfaces;
+using SupplierServiceNet.CrossCutting.Dtos;
+using SupplierServiceNet.CrossCutting.Supplier;
 using System.Security.Claims;
 
-namespace PaymentServiceNet.Controllers
+namespace SupplierServiceNet.Controllers
 {
  
     [ApiController]
@@ -53,7 +53,8 @@ namespace PaymentServiceNet.Controllers
             var supplier = await _supplierService.GetByIdAsync(id, ct);
             if (supplier is null) return NotFound();
 
-            return Ok(_mapper.Map<SupplierDto>(supplier));
+            //return Ok(_mapper.Map<SupplierDto>(supplier));
+            return Ok(supplier);
         }
 
         // POST: api/suppliers

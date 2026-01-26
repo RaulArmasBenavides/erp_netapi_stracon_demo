@@ -1,6 +1,6 @@
-﻿using PaymentServiceNet.Core.Entities;
+﻿using SupplierServiceNet.Core.Entities;
 
-namespace PaymentServiceNet.Core.IRepositorio
+namespace SupplierServiceNet.Core.IRepositorio
 {
     public interface IUserRepository
     {
