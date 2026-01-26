@@ -118,7 +118,7 @@ namespace SupplierServiceNet.Application.Services
                     Email = usuario.Email,
                     PhoneNumber = usuario.PhoneNumber,
                     Role = roles.FirstOrDefault() ?? "Sin rol",
-                    Created = usuario.
+                    Created = usuario.CreatedAt
                 });
             }
 

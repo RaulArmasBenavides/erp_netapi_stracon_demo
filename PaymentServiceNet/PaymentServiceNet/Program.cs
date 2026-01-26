@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Serilog;
 using SupplierServiceNet.Application.Dtos;
 using SupplierServiceNet.Core.Entities;
  
@@ -8,7 +9,7 @@ using SupplierServiceNet.Extensions;
 using SupplierServiceNet.Infrastructure;
 using SupplierServiceNet.Infrastructure.Data;
 using SupplierServiceNet.Middlewares;
-using Serilog;
+using SupplierServiceNet.Seed;
 
 public class Program
 {
@@ -20,7 +21,7 @@ public class Program
             CreateMap<User, DataUserDto>().ReverseMap();
         }
     }
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         //Soporte para autenticación con .NET Identity
@@ -61,6 +62,26 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseSwaggerGen();
+        }
+
+        // Ejecutar migraciones y seeding automático
+        using (var scope = app.Services.CreateScope())
+        {
+            try
+            {
+                await SeedData.InitializeAsync(scope.ServiceProvider);
+            }
+            catch (Exception ex)
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "Error durante la inicialización de la base de datos");
+
+                // En desarrollo, puedes mostrar el error detallado
+                if (app.Environment.IsDevelopment())
+                {
+                    throw;
+                }
+            }
         }
         //app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
