@@ -41,11 +41,7 @@ namespace SupplierServiceNet.Application.Services
 
             if (usuario == null)
             {
-                return new UsuarioLoginRespuestaDto()
-                {
-                    Access_token = "",
-                    User = null
-                };
+                throw new Exception("Credenciales inválidas");
             }
 
             // Verificar contraseña
@@ -53,11 +49,7 @@ namespace SupplierServiceNet.Application.Services
 
             if (!isValid)
             {
-                return new UsuarioLoginRespuestaDto()
-                {
-                    Access_token = "",
-                    User = null
-                };
+                throw new Exception("Credenciales inválidas");
             }
 
             // Aquí existe el usuario y la contraseña es válida
@@ -70,20 +62,21 @@ namespace SupplierServiceNet.Application.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-            new Claim(ClaimTypes.Name, usuario.UserName.ToString()),
-            new Claim(ClaimTypes.Email, usuario.Email.ToString()),
-            new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? string.Empty)
+                    new Claim(ClaimTypes.Name, usuario.UserName.ToString()),
+                    new Claim(ClaimTypes.Email, usuario.Email.ToString()),
+                    new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? string.Empty)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             };
 
             var token = manejadorToken.CreateToken(tokenDescriptor);
-
+            var userdto = _mapper.Map<DataUserDto>(usuario);
+            userdto.Role = roles.FirstOrDefault();
             UsuarioLoginRespuestaDto usuarioLoginRespuestaDto = new UsuarioLoginRespuestaDto()
             {
                 Access_token = manejadorToken.WriteToken(token),
-                User = _mapper.Map<DataUserDto>(usuario)
+                User = userdto
             };
 
             return usuarioLoginRespuestaDto;

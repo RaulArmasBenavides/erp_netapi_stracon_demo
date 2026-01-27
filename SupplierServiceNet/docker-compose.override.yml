@@ -1,12 +1,16 @@
 name: stracon-net
 version: "3.9"
 
+networks:
+  backend:
+    name: SupplierServiceNet-network
+
 services:
   straconapinet:
-    image: ${DOCKER_REGISTRY-}stracon_net
     build:
       context: .
-      dockerfile: SupplierServiceNet/Dockerfile
+      dockerfile: Dockerfile
+    container_name: SupplierServiceNet-webapi
     ports:
       - "8000:80"
     depends_on:
@@ -14,6 +18,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       ConnectionStrings__ConexionSQL: "Server=sqlserver,1433;Database=stracon_db;User Id=sa;Password=P@ssw0rd?ts;Encrypt=False;TrustServerCertificate=True"
+    networks:
+      - backend
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -25,6 +31,8 @@ services:
       MSSQL_PID: "Express"
     ports:
       - "14333:1433"   # para conectarte desde tu PC (opcional)
+    networks:
+      - backend
     volumes:
       - stracon_sql_data:/var/opt/mssql
     healthcheck:

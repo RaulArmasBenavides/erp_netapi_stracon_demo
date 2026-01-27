@@ -146,7 +146,7 @@ namespace SupplierServiceNet.Controllers
             var approved = await this._supplierService.ApproveAsync(id, approvedBy, ct);
             if (approved is null) return NotFound();
 
-            return Ok(_mapper.Map<SupplierDto>(approved));
+            return Ok(approved);
         }
 
     }

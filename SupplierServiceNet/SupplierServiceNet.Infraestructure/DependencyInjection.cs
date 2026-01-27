@@ -13,7 +13,7 @@ namespace SupplierServiceNet.Infrastructure
          IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("ConexionSQL"),
+            options.UseSqlServer(configuration.GetConnectionString("ConexionSql"),
                   b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)), 
                   ServiceLifetime.Scoped);
 
