@@ -13,7 +13,7 @@ namespace SupplierServiceNet.Core.Interfaces
         Task<IReadOnlyList<Core.Entities.Supplier>> GetAllAsync(CancellationToken ct = default);
         Task<Core.Entities.Supplier?> GetByIdAsync(Guid id, CancellationToken ct = default);
 
-        Task<Core.Entities.Supplier> CreateAsync(CreateSupplierDto dto, CancellationToken ct = default);
+        Task<Core.Entities.Supplier> CreateAsync(CreateSupplierDto dto, string createdBy, CancellationToken ct = default);
 
         Task<Core.Entities.Supplier?> PatchAsync(Guid id, UpdateSupplierDto dto, CancellationToken ct = default);
         Task<Core.Entities.Supplier?> PatchPhotoAsync(Guid id, string? photoId, CancellationToken ct = default);

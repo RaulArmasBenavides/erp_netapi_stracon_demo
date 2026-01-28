@@ -57,7 +57,7 @@ namespace SupplierServiceNet.Controllers
         }
 
         [Authorize(Roles = "Approver")]
-        [HttpPost("Approver")]        
+        [HttpPost]        
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

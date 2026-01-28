@@ -82,30 +82,35 @@ namespace SupplierServiceNet.Application.Services
             return usuarioLoginRespuestaDto;
         }
 
-        public async Task<DataUserDto> Registro(UsuarioRegistroDto usuarioRegistroDto)
+        public async Task<DataUserDto> Registro(UsuarioRegistroDto dto)
         {
-            User usuario = new()
+            var usuario = new User
             {
-                UserName = usuarioRegistroDto.NombreUsuario,
-                Email = usuarioRegistroDto.NombreUsuario,
-                NormalizedEmail = usuarioRegistroDto.NombreUsuario.ToUpper(),
-                NormalizedUserName = usuarioRegistroDto.Nombre,
+                UserName = dto.UserName,
+                Email = dto.Email,
+                NormalizedEmail = dto.Email.ToUpper(),
+                NormalizedUserName = dto.UserName.ToUpper(),
+                CreatedAt = DateTime.Now
+                
             };
-            var result = await this._userManager.CreateAsync(usuario, usuarioRegistroDto.Password);
-            if (result.Succeeded)
+
+            var result = await _userManager.CreateAsync(usuario, dto.Password);
+
+            if (!result.Succeeded)
             {
-                //if (!_roleManager.RoleExistsAsync("Requester").GetAwaiter().GetResult())
-                //{
-                //    await _roleManager.CreateAsync(new IdentityRole("Requester"));
-                //    await _roleManager.CreateAsync(new IdentityRole("Approver"));
-                //}
-                await EnsureRoleExistsAsync("Requester");
-                await EnsureRoleExistsAsync("Approver");
-                await this._userManager.AddToRoleAsync(usuario, "Requester");
-                var usuarioRetornado = this._unitOfWork.Users.GetUsuarioByUserName(usuarioRegistroDto.NombreUsuario);
-                return _mapper.Map<DataUserDto>(usuarioRetornado);
+                var errors = string.Join(" | ", result.Errors.Select(e => e.Description));
+                throw new ApplicationException($"Error al registrar usuario: {errors}");
             }
-            return new DataUserDto();
+
+            await EnsureRoleExistsAsync("Requester");
+            await EnsureRoleExistsAsync("Approver");
+
+            await _userManager.AddToRoleAsync(usuario, "Requester");
+
+            var usuarioRetornado =
+                await _unitOfWork.Users.GetUsuarioByUserNameOrEmailAsync(dto.UserName);
+
+            return _mapper.Map<DataUserDto>(usuarioRetornado);
         }
 
         private async Task EnsureRoleExistsAsync(string roleName)

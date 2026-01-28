@@ -40,7 +40,7 @@ namespace SupplierServiceNet.Application.Services
             return await _uow.Suppliers.GetByIdAsync(id);
         }
 
-        public async Task<Supplier> CreateAsync(CreateSupplierDto dto, CancellationToken ct = default)
+        public async Task<Supplier> CreateAsync(CreateSupplierDto dto, string createdBy, CancellationToken ct = default)
         {
             string? photoId = null;
 
@@ -48,7 +48,7 @@ namespace SupplierServiceNet.Application.Services
             if (dto.Photo != null)
             {
                 // Usar el servicio de Cloudinary
-                var uploadResult = await _cloudinaryService.UploadImageAsync(dto.Photo, _cloudinaryOptions.SuppliersFolder, ct);
+                var uploadResult = await this._cloudinaryService.UploadImageAsync(dto.Photo, this._cloudinaryOptions.SuppliersFolder, ct);
                 // Asumiendo que uploadResult tiene una propiedad PublicId
                 photoId = uploadResult.Url;
             }
@@ -60,7 +60,8 @@ namespace SupplierServiceNet.Application.Services
                 address: dto.Address,
                 phone: dto.Phone,
                 email: dto.Email,
-                photoId: photoId  // Asignamos el public_id de Cloudinary
+                photoId: photoId,  // Asignamos el public_id de Cloudinary,
+                createdBy: createdBy
             );
 
             await _uow.Suppliers.AddAsync(supplier);

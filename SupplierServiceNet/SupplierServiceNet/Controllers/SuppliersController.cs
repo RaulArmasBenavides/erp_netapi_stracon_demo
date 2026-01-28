@@ -65,9 +65,16 @@ namespace SupplierServiceNet.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateSupplier([FromForm] CreateSupplierDto dto, CancellationToken ct)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var createdBy =
+             User.FindFirstValue(ClaimTypes.Email)
+             ?? User.FindFirstValue("email")
+             ?? User.Identity?.Name
+             ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
+             ?? User.FindFirstValue("sub");
 
-            var created = await _supplierService.CreateAsync(dto, ct);
+            if (string.IsNullOrWhiteSpace(createdBy))
+                return Unauthorized("Token sin claim identificable (email/name/sub).");
+            var created = await _supplierService.CreateAsync(dto, createdBy, ct);
             //var createdDto = _mapper.Map<SupplierDto>(created);
 
             // 201 + Location header
