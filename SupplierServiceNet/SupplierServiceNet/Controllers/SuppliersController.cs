@@ -2,25 +2,33 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SupplierServiceNet.Application.Interfaces;
 using SupplierServiceNet.Core.Interfaces;
 using SupplierServiceNet.CrossCutting.Dtos;
 using SupplierServiceNet.CrossCutting.Supplier;
-using System.Security.Claims;
+using SupplierServiceNet.CrossCutting.Exceptions;
 
 namespace SupplierServiceNet.Controllers
 {
- 
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/suppliers")]
     public sealed class SuppliersController : ControllerBase
     {
         private readonly ISupplierService _supplierService;
+        private readonly IUserContextService _userContextService;
+        private readonly IExcelService _excelService;
         private readonly IMapper _mapper;
 
-        public SuppliersController(ISupplierService supplierService, IMapper mapper)
+        public SuppliersController(
+            ISupplierService supplierService,
+            IUserContextService userContextService,
+            IExcelService excelService,
+            IMapper mapper)
         {
             _supplierService = supplierService;
+            _userContextService = userContextService;
+            _excelService = excelService;
             _mapper = mapper;
         }
 
@@ -65,20 +73,17 @@ namespace SupplierServiceNet.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateSupplier([FromForm] CreateSupplierDto dto, CancellationToken ct)
         {
-            var createdBy =
-             User.FindFirstValue(ClaimTypes.Email)
-             ?? User.FindFirstValue("email")
-             ?? User.Identity?.Name
-             ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
-             ?? User.FindFirstValue("sub");
+            try
+            {
+                var createdBy = _userContextService.GetUserIdentifier();
+                var created = await _supplierService.CreateAsync(dto, createdBy, ct);
 
-            if (string.IsNullOrWhiteSpace(createdBy))
-                return Unauthorized("Token sin claim identificable (email/name/sub).");
-            var created = await _supplierService.CreateAsync(dto, createdBy, ct);
-            //var createdDto = _mapper.Map<SupplierDto>(created);
-
-            // 201 + Location header
-            return CreatedAtRoute("GetSupplier", new { id = created.Id }, created);
+                return CreatedAtRoute("GetSupplier", new { id = created.Id }, created);
+            }
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         // PATCH: api/suppliers/{id}
@@ -124,10 +129,18 @@ namespace SupplierServiceNet.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteSupplier(Guid id, CancellationToken ct)
         {
-            var deleted = await _supplierService.DeleteAsync(id, ct);
-            if (!deleted) return NotFound();
+            try
+            {
+                var deletedBy = _userContextService.GetUserIdentifier();
+                var deleted = await _supplierService.DeleteAsync(id, deletedBy, ct);
+                if (!deleted) return NotFound();
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
 
@@ -139,21 +152,73 @@ namespace SupplierServiceNet.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ApproveSupplier(Guid id, CancellationToken ct)
         {
-            // Prioridad: email -> name -> sub (id)
-            var approvedBy =
-                User.FindFirstValue(ClaimTypes.Email)
-                ?? User.FindFirstValue("email")
-                ?? User.Identity?.Name
-                ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
-                ?? User.FindFirstValue("sub");
+            try
+            {
+                var approvedBy = _userContextService.GetUserIdentifier();
+                var approved = await _supplierService.ApproveAsync(id, approvedBy, ct);
 
-            if (string.IsNullOrWhiteSpace(approvedBy))
-                return Unauthorized("Token sin claim identificable (email/name/sub).");
+                if (approved is null)
+                    return NotFound();
 
-            var approved = await this._supplierService.ApproveAsync(id, approvedBy, ct);
-            if (approved is null) return NotFound();
+                return Ok(approved);
+            }
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+        }
 
-            return Ok(approved);
+        [Authorize(Roles = "Requester,Approver")]
+        [HttpGet("export/template")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult DownloadTemplate()
+        {
+            var excelFile = _excelService.GenerateTemplateExcel();
+            return File(excelFile, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Supplier_Template.xlsx");
+        }
+
+        [Authorize(Roles = "Requester,Approver")]
+        [HttpGet("export")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> ExportSuppliers(CancellationToken ct)
+        {
+            var suppliers = await _supplierService.GetForExportAsync(ct);
+            var excelFile = _excelService.ExportSuppliersToExcel(suppliers);
+
+            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            var fileName = $"Suppliers_Export_{timestamp}.xlsx";
+
+            return File(excelFile, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+
+        [Authorize(Roles = "Requester,Approver")]
+        [HttpPost("import")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> ImportSuppliers([FromForm] IFormFile file, CancellationToken ct)
+        {
+            try
+            {
+                var importedBy = _userContextService.GetUserIdentifier();
+                var suppliersData = await _excelService.ReadSuppliersFromExcelAsync(file);
+                var result = await _supplierService.BulkImportAsync(suppliersData, importedBy, ct);
+
+                return Ok(result);
+            }
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
     }

@@ -38,5 +38,8 @@ namespace SupplierServiceNet.Core.IRepositorio
 
         bool Exists(Expression<Func<T, bool>> filter);
         Task<bool> ExistsAsync(Expression<Func<T, bool>> filter, CancellationToken ct = default);
+
+        IQueryable<T> AsQueryable();
+        IQueryable<T> IgnoreQueryFilters();
     }
 }

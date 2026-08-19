@@ -1,10 +1,6 @@
 ﻿using SupplierServiceNet.Core.Entities;
 using SupplierServiceNet.CrossCutting.Supplier;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SupplierServiceNet.CrossCutting.Dtos.Excel;
 
 namespace SupplierServiceNet.Core.Interfaces
 {
@@ -19,6 +15,10 @@ namespace SupplierServiceNet.Core.Interfaces
         Task<Core.Entities.Supplier?> PatchPhotoAsync(Guid id, string? photoId, CancellationToken ct = default);
 
         Task<Supplier?> ApproveAsync(Guid id, string approvedBy, CancellationToken ct = default);
-        Task<bool> DeleteAsync(Guid id, CancellationToken ct = default);
+        Task<bool> DeleteAsync(Guid id, string deletedBy, CancellationToken ct = default);
+        Task<bool> RestoreAsync(Guid id, CancellationToken ct = default);
+
+        Task<BulkImportResultDto> BulkImportAsync(List<SupplierImportDto> suppliers, string importedBy, CancellationToken ct = default);
+        Task<List<SupplierExportDto>> GetForExportAsync(CancellationToken ct = default);
     }
 }

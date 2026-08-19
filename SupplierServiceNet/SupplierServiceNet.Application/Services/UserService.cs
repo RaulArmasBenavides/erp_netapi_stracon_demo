@@ -4,13 +4,15 @@ using SupplierServiceNet.Core.Entities;
 using SupplierServiceNet.Infrastructure.Repositorio.WorkContainer;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 using SupplierServiceNet.Core.IRepositorio;
+using SupplierServiceNet.CrossCutting.Options;
+using SupplierServiceNet.CrossCutting.Exceptions;
+
 namespace SupplierServiceNet.Application.Services
 {
     public class UserService : IUserService
@@ -18,17 +20,21 @@ namespace SupplierServiceNet.Application.Services
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
-        private IConfiguration _config;
-
+        private readonly ApiSettings _apiSettings;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public UserService(IUnitOfWork unitOfWork, IConfiguration config, UserManager<User> userManager, IMapper mapper , RoleManager<IdentityRole> roleManager)
+
+        public UserService(
+            IUnitOfWork unitOfWork,
+            UserManager<User> userManager,
+            IMapper mapper,
+            RoleManager<IdentityRole> roleManager,
+            IOptions<ApiSettings> apiSettings)
         {
             _userManager = userManager;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _userManager = userManager;
-            _config = config;
             _roleManager = roleManager;
+            _apiSettings = apiSettings.Value;
         }
 
         public async Task<UsuarioLoginRespuestaDto> Login(LoginUserDto usuarioLoginDto)
@@ -41,7 +47,7 @@ namespace SupplierServiceNet.Application.Services
 
             if (usuario == null)
             {
-                throw new Exception("Credenciales inválidas");
+                throw new AuthenticationException("Invalid credentials");
             }
 
             // Verificar contraseña
@@ -49,13 +55,13 @@ namespace SupplierServiceNet.Application.Services
 
             if (!isValid)
             {
-                throw new Exception("Credenciales inválidas");
+                throw new AuthenticationException("Invalid credentials");
             }
 
             // Aquí existe el usuario y la contraseña es válida
             var roles = await this._userManager.GetRolesAsync(usuario);
             var manejadorToken = new JwtSecurityTokenHandler();
-            string keyconfig = _config.GetSection("ApiSettings:Secreta").Value.ToString();
+            var keyconfig = _apiSettings.Secreta;
 
             var key = Encoding.ASCII.GetBytes(keyconfig);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -66,7 +72,7 @@ namespace SupplierServiceNet.Application.Services
                     new Claim(ClaimTypes.Email, usuario.Email.ToString()),
                     new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? string.Empty)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(_apiSettings.TokenExpirationDays),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             };
 

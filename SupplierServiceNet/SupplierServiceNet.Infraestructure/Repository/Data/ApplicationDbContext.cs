@@ -20,6 +20,16 @@ namespace SupplierServiceNet.Infrastructure.Data
                 .HasOne<IdentityRole>()
                 .WithMany()
                 .HasForeignKey(ur => ur.RoleId);
+
+            // Global query filters for soft delete
+            builder.Entity<Supplier>()
+                .HasQueryFilter(s => !s.IsDeleted);
+
+            builder.Entity<PurchaseRequest>()
+                .HasQueryFilter(pr => !pr.IsDeleted);
+
+            builder.Entity<User>()
+                .HasQueryFilter(u => !u.IsDeleted);
         }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<PurchaseRequest> PurchaseRequests { get; set; }

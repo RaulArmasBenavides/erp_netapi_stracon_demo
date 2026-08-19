@@ -1,4 +1,5 @@
 ﻿using SupplierServiceNet.Application.Dtos.Response;
+using SupplierServiceNet.CrossCutting.Exceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -28,33 +29,56 @@ namespace SupplierServiceNet.Middlewares
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-                // Obtener el mensaje de la excepción.
-                var message = ex.Message;
-
-                // Obtener el nombre completo del tipo de la excepción.
-                var exceptionType = ex.GetType().FullName;
-
-                // Obtener la traza de la pila.
-                var stackTrace = ex.StackTrace;
-                // Acceder a los valores de la ruta
-                var routeValues = httpContext.Request.RouteValues;
-
-                // Obtener el controlador y la acción, si están disponibles
-                var controller = routeValues["controller"]?.ToString();
-                var action = routeValues["action"]?.ToString();
-                httpContext.Response.ContentType = "application/json";
-                httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-                var response = _hostEnvironment.IsDevelopment() ?
-                    new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
-                    : new ApiException((int)HttpStatusCode.InternalServerError);
-
-                var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-                var json = JsonSerializer.Serialize(response, options);
-
-                await httpContext.Response.WriteAsync(json);
+                await HandleExceptionAsync(httpContext, ex);
             }
+        }
+
+        private Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
+        {
+            httpContext.Response.ContentType = "application/json";
+
+            var statusCode = HttpStatusCode.InternalServerError;
+            var message = exception.Message;
+
+            switch (exception)
+            {
+                case AuthenticationException:
+                    statusCode = HttpStatusCode.Unauthorized;
+                    _logger.LogWarning("Authentication failed: {Message}", message);
+                    break;
+
+                case UnauthorizedException:
+                    statusCode = HttpStatusCode.Unauthorized;
+                    _logger.LogWarning("Unauthorized access: {Message}", message);
+                    break;
+
+                case ValidationException:
+                    statusCode = HttpStatusCode.BadRequest;
+                    _logger.LogWarning("Validation error: {Message}", message);
+                    break;
+
+                case NotFoundException:
+                    statusCode = HttpStatusCode.NotFound;
+                    _logger.LogWarning("Not found: {Message}", message);
+                    break;
+
+                default:
+                    _logger.LogError(exception, "Unhandled exception: {Message}", message);
+                    message = _hostEnvironment.IsDevelopment() ? message : "An error occurred processing your request.";
+                    break;
+            }
+
+            httpContext.Response.StatusCode = (int)statusCode;
+
+            var response = new ApiException(
+                (int)statusCode,
+                message,
+                _hostEnvironment.IsDevelopment() ? exception.StackTrace : null);
+
+            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+            var json = JsonSerializer.Serialize(response, options);
+
+            return httpContext.Response.WriteAsync(json);
         }
     }
 }

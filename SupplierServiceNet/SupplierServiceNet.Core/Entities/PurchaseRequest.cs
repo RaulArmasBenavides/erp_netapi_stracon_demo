@@ -24,6 +24,10 @@ namespace SupplierServiceNet.Core.Entities
         public PurchaseRequestStatus Status { get; private set; }
         public DateTimeOffset CreatedAt { get; private set; }
 
+        public bool IsDeleted { get; private set; }
+        public DateTimeOffset? DeletedAt { get; private set; }
+        public string? DeletedBy { get; private set; }
+
         private PurchaseRequest() { } // Para ORM
 
         public PurchaseRequest(
@@ -51,6 +55,22 @@ namespace SupplierServiceNet.Core.Entities
         public void UpdateDescription(string description)
         {
             Description = Guard.NotNullOrWhiteSpace(description, nameof(description));
+        }
+
+        public void SoftDelete(string deletedBy)
+        {
+            if (IsDeleted) return; // idempotente
+
+            DeletedBy = Guard.NotNullOrWhiteSpace(deletedBy, nameof(deletedBy));
+            DeletedAt = DateTimeOffset.UtcNow;
+            IsDeleted = true;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedAt = null;
+            DeletedBy = null;
         }
     }
 }

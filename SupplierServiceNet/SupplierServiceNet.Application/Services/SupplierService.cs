@@ -1,14 +1,12 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SupplierServiceNet.Core.Entities;
 using SupplierServiceNet.Core.Interfaces;
 using SupplierServiceNet.Core.IRepositorio;
 using SupplierServiceNet.CrossCutting.Options;
 using SupplierServiceNet.CrossCutting.Supplier;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SupplierServiceNet.CrossCutting.Dtos.Excel;
+using SupplierServiceNet.CrossCutting.Exceptions;
 
 namespace SupplierServiceNet.Application.Services
 {
@@ -117,15 +115,149 @@ namespace SupplierServiceNet.Application.Services
 
             return supplier;
         }
-        public async Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(Guid id, string deletedBy, CancellationToken ct = default)
         {
             var supplier = await _uow.Suppliers.GetByIdAsync(id);
             if (supplier is null) return false;
 
-            _uow.Suppliers.Remove(supplier);
+            supplier.SoftDelete(deletedBy);
+            _uow.Suppliers.Update(supplier);
             await _uow.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<bool> RestoreAsync(Guid id, CancellationToken ct = default)
+        {
+            var supplier = await _uow.Suppliers.IgnoreQueryFilters()
+                .FirstOrDefaultAsync(s => s.Id == id, ct);
+            if (supplier is null) return false;
+
+            supplier.Restore();
+            _uow.Suppliers.Update(supplier);
+            await _uow.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<BulkImportResultDto> BulkImportAsync(List<SupplierImportDto> suppliers, string importedBy, CancellationToken ct = default)
+        {
+            var result = new BulkImportResultDto
+            {
+                TotalRows = suppliers.Count
+            };
+
+            var allSuppliers = await _uow.Suppliers.GetAllAsync();
+
+            for (int i = 0; i < suppliers.Count; i++)
+            {
+                var supplierDto = suppliers[i];
+                var rowNumber = i + 2; // Excel row number (header is row 1)
+
+                var validationErrors = supplierDto.GetValidationErrors();
+                if (validationErrors.Any())
+                {
+                    result.FailedImports++;
+                    result.Errors.Add(new RowErrorDto
+                    {
+                        RowNumber = rowNumber,
+                        Identifier = supplierDto.Id ?? supplierDto.Name ?? "Unknown",
+                        Errors = validationErrors
+                    });
+                    continue;
+                }
+
+                try
+                {
+                    if (supplierDto.IsUpdate)
+                    {
+                        // Update existing
+                        if (!Guid.TryParse(supplierDto.Id, out var supplierId))
+                        {
+                            result.FailedImports++;
+                            result.Errors.Add(new RowErrorDto
+                            {
+                                RowNumber = rowNumber,
+                                Identifier = supplierDto.Id ?? supplierDto.Name ?? "Unknown",
+                                Errors = new List<string> { "Invalid ID format (must be GUID)" }
+                            });
+                            continue;
+                        }
+
+                        var existing = allSuppliers.FirstOrDefault(s => s.Id == supplierId);
+                        if (existing == null)
+                        {
+                            result.FailedImports++;
+                            result.Errors.Add(new RowErrorDto
+                            {
+                                RowNumber = rowNumber,
+                                Identifier = supplierDto.Id,
+                                Errors = new List<string> { $"Supplier with ID {supplierId} not found" }
+                            });
+                            continue;
+                        }
+
+                        existing.UpdateInfo(supplierDto.Name, supplierDto.Address, supplierDto.Phone, supplierDto.Email);
+                        _uow.Suppliers.Update(existing);
+                    }
+                    else
+                    {
+                        // Create new
+                        var newSupplier = new Supplier(
+                            id: Guid.NewGuid(),
+                            name: supplierDto.Name!,
+                            address: supplierDto.Address,
+                            phone: supplierDto.Phone!,
+                            email: supplierDto.Email!,
+                            photoId: null,
+                            createdBy: importedBy
+                        );
+
+                        await _uow.Suppliers.AddAsync(newSupplier);
+                    }
+
+                    result.SuccessfulImports++;
+                }
+                catch (Exception ex)
+                {
+                    result.FailedImports++;
+                    result.Errors.Add(new RowErrorDto
+                    {
+                        RowNumber = rowNumber,
+                        Identifier = supplierDto.Id ?? supplierDto.Name ?? "Unknown",
+                        Errors = new List<string> { $"Error processing row: {ex.Message}" }
+                    });
+                }
+            }
+
+            // Save all changes at once
+            if (result.SuccessfulImports > 0)
+            {
+                await _uow.SaveChangesAsync();
+            }
+
+            result.Message = result.FailedImports == 0
+                ? $"Successfully imported {result.SuccessfulImports} suppliers"
+                : $"Imported {result.SuccessfulImports} of {result.TotalRows} suppliers. {result.FailedImports} failed.";
+
+            return result;
+        }
+
+        public async Task<List<SupplierExportDto>> GetForExportAsync(CancellationToken ct = default)
+        {
+            var suppliers = await _uow.Suppliers.GetAllAsync();
+
+            return suppliers.Select(s => new SupplierExportDto
+            {
+                Id = s.Id.ToString(),
+                Name = s.Name,
+                Email = s.Email,
+                Phone = s.Phone,
+                Address = s.Address,
+                Status = s.IsApproved ? "Approved" : "Pending",
+                CreatedBy = s.CreatedBy,
+                CreatedAt = s.CreatedAt.DateTime
+            }).ToList();
         }
     }
 }

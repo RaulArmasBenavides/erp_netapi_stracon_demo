@@ -21,6 +21,10 @@ namespace SupplierServiceNet.Core.Entities
         public DateTimeOffset? ApprovedAt { get; private set; }
         public string? ApprovedBy { get; private set; }
 
+        public bool IsDeleted { get; private set; }
+        public DateTimeOffset? DeletedAt { get; private set; }
+        public string? DeletedBy { get; private set; }
+
         // Navegación de dominio (opcional). En DDD suele ser agregado raíz.
         private readonly List<PurchaseRequest> _purchaseRequests = new();
         public IReadOnlyCollection<PurchaseRequest> PurchaseRequests => _purchaseRequests.AsReadOnly();
@@ -78,6 +82,22 @@ namespace SupplierServiceNet.Core.Entities
         public void SetPhoto(string? photoId)
         {
             Photo = photoId;
+        }
+
+        public void SoftDelete(string deletedBy)
+        {
+            if (IsDeleted) return; // idempotente
+
+            DeletedBy = Guard.NotNullOrWhiteSpace(deletedBy, nameof(deletedBy));
+            DeletedAt = DateTimeOffset.UtcNow;
+            IsDeleted = true;
+        }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedAt = null;
+            DeletedBy = null;
         }
 
         public PurchaseRequest CreatePurchaseRequest(Guid requestedByUserId, string description)

@@ -156,5 +156,15 @@ namespace SupplierServiceNet.Infrastructure.Repositorio
         {
             return _dbset.AnyAsync(filter, ct);
         }
+
+        public IQueryable<T> AsQueryable()
+        {
+            return _dbset.AsQueryable();
+        }
+
+        public IQueryable<T> IgnoreQueryFilters()
+        {
+            return _dbset.IgnoreQueryFilters();
+        }
     }
 }

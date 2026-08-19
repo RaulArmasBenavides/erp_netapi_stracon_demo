@@ -11,6 +11,10 @@ namespace SupplierServiceNet.Application.Dtos
 
         [Required(ErrorMessage = "El password es obligatorio")]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "La confirmación de contraseña es obligatoria")]
+        public string ConfirmPassword { get; set; }
+
         public string Role { get; set; }
     }
 }
